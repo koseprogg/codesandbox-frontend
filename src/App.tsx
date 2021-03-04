@@ -7,7 +7,7 @@ const App: React.FC = () => {
   const [code, setCode] = useState("");
   const [response, setResponse] = useState("Ikke mottatt noen respons:(");
 
-  function handleCodeChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const inputValue = `${event.target.value}`;
     setCode(inputValue);
   }
@@ -25,9 +25,11 @@ const App: React.FC = () => {
     <div className="page-wrapper">
       <div className="text-editor">
         <p>Kode under</p>
-        <input
+        <textarea
           className="code-field"
-          type="text"
+          // type="text"
+          rows={20}
+          cols={60}
           placeholder="Code"
           spellCheck="false"
           value={code}
