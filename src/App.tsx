@@ -18,7 +18,7 @@ const App: React.FC = () => {
       code: code,
     });
     console.log(response);
-    setResponse(response.data.result);
+    setResponse(JSON.stringify(response.data.result));
   }
 
   return (
