@@ -1,0 +1,20 @@
+@import './styles/colors.scss';
+
+body {
+  background-color: var(--color-primary-blue); 
+}
+
+html,body, #root {
+  height:100%;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: row;
+  columns: 3;
+  height: 100%;
+}
+
+p {
+  color: white;
+}
