@@ -1,0 +1,43 @@
+@import "../styles/colors.scss";
+
+body {
+  background-color: #ffebcd;
+}
+
+#header {
+  font-family: cursive;
+  color: gray;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+#opp.header {
+  margin-left: 30px;
+}
+
+p {
+  color: white;
+}
+
+.codeMirror-editor {
+  width: 800px;
+}
+
+.react-codemirror2,
+.cm-s-material {
+  height: 100%;
+}
