@@ -10,11 +10,19 @@ html,body, #root {
 
 .page-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   columns: 3;
   height: 100%;
 }
 
 p {
   color: white;
+}
+
+.codeMirror-editor {
+  width: 800px;
+}
+
+.react-codemirror2, .cm-s-material {
+  height: 100%;
 }

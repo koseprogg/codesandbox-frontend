@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import "sanitize.css";
 import axios from "axios";
+import { Controlled as CodeMirror } from "react-codemirror2";
+import codemirror from "codemirror";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/material.css";
+import "codemirror/theme/neat.css";
+import "codemirror/mode/javascript/javascript.js";
 
 const App: React.FC = () => {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("const a = 0;");
   const [response, setResponse] = useState("Ikke mottatt noen respons:(");
 
   function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -39,6 +45,22 @@ const App: React.FC = () => {
           Send kode!
         </button>
         <p>{response}</p>
+      </div>
+      <div className="codeMirror-editor">
+        <CodeMirror
+          value={code}
+          options={{
+            mode: "javascript",
+            theme: "material",
+            lineNumbers: true,
+          }}
+          onBeforeChange={(editor, data, value) => {
+            setCode(value);
+          }}
+          onChange={(editor, data, value) => {
+            setCode(value);
+          }}
+        />
       </div>
     </div>
   );
