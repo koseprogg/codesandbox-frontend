@@ -1,0 +1,25 @@
+/*Mainpage styling */
+
+#mainpage-title {
+  justify-content: center;
+  display: flex;
+  margin-top: 10px;
+}
+
+#main-bunny {
+  justify-content: center;
+  display: flex;
+  margin-top: 50px;
+}
+#flex-parent {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  list-style: none;
+}
+
+.flex-child {
+  padding: 10px;
+  margin-top: 15px;
+  display: flex;
+}

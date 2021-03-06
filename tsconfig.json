@@ -9,5 +9,5 @@
       "moduleResolution": "node",
       "esModuleInterop": true
     },
-    "include": ["src", "*.js"]
+    "include": ["src", "*.js", "dist/images/components"]
   }

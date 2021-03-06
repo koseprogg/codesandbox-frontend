@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from "react";
 import "./nutpage.css";
-import "sanitize.css";
 import axios from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import codemirror from "codemirror";
