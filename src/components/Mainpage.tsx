@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from "react";
 import {Figure, Button, Card} from "react-bootstrap";
-import "./mainpage.css";
+import "./Mainpage.css";
 
 
 const Mainpage: React.FC = () => {
