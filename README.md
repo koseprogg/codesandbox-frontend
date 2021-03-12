@@ -1,1 +1,1 @@
-#Smittesporing frontend
+# Sandbox 'POC frontend
