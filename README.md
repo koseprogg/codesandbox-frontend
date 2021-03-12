@@ -1,1 +1,1 @@
-# Sandbox 'POC frontend
+# Sandbox POC frontend
