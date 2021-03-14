@@ -11,8 +11,20 @@ import "codemirror/mode/javascript/javascript.js";
 import { Alert, Button, Row, Col, Container } from "react-bootstrap";
 
 const Nutpage: React.FC = () => {
-  const [code, setCode] = useState("const a = 0;");
+  const [code, setCode] = useState(`const fibo = (n) => {
+    const numbers = [];
+    
+    while (numbers.length < n) {
+      numbers.push(numbers.length === 0 ? 0 : numbers.length === 1 ? 1 : (numbers[numbers.length - 1] + numbers[numbers.length - 2]))
+    }
+    
+    return numbers;
+  }
+  
+  fibo(n);
+  `);
   const [response, setResponse] = useState("");
+  const [score, setScore] = useState<number>();
 
   function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const inputValue = `${event.target.value}`;
@@ -26,6 +38,7 @@ const Nutpage: React.FC = () => {
     });
     console.log(response);
     setResponse(JSON.stringify(response.data.result));
+    setScore(JSON.stringify(response.data.msg));
   }
 
   return (
@@ -51,17 +64,18 @@ const Nutpage: React.FC = () => {
         <Alert variant="warning">
           Output: {response} 
         </Alert>
+        {score && <Alert variant="warning">
+          {`Score: ${score}%`}
+        </Alert>}
         <Button onClick={sendCode} variant="primary">Send kode</Button>  
       </div>
         
         <div>
         <h1 id= "opp-header">Oppgavetekst</h1>
-        <ul>
-        <li>1. Lag to variabler kalt a og b, 1 og 2</li>
-        <li>2. Lag en funksjon tar i mot to tall</li>
-        <li>3. Funksjonen over skal returnere de to tallene modulus a*b</li>
-        <li>4. Kjør funksjonen med argument 4 og 5</li>
-        </ul>
+        <p style={{color: 'black'}}> Skriv og kjør en funksjon som tar inn ett argument som heter n. Funksjonen skal returnere en liste med
+          tallene i Fibonacci-rekken til og med det n-te tallet. For eksempel, ved n = 10 skal
+          funksjonen returnere [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]. 
+        </p>
       </div>
         
       
