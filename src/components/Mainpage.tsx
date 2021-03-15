@@ -3,10 +3,35 @@ import React, { useState, useEffect } from "react";
 import {Figure, Button, Card} from "react-bootstrap";
 import "./Mainpage.css";
 
-
 const Mainpage: React.FC = () => {
 
-  const dager = [{"day": "Dag 1", "img": "../components/easter.jpg", "caption": "Yoyoy lesssgo"},{"day": "Dag 2", "img": "./easter.jpg", "caption": "Yoyoy lesssgo"},{"day": "Dag 3", "img": "./easter.jpg", "caption": "Yoyoy lesssgo"}, {"day": "Dag 4", "img": "./easter.jpg", "caption": "Yoyoy lesssgo"}, {"day": "Dag 5", "img": "./easter.jpg", "caption": "Yoyoy lesssgo"}]
+  const dager = [
+    {
+      "day": "Dag 1",
+      "img": "../components/easter.jpg",
+      "caption": "Yoyoy lesssgo"
+    },
+    {
+      "day": "Dag 2",
+      "img": "./easter.jpg",
+      "caption": "Yoyoy lesssgo"
+    },
+    {
+      "day": "Dag 3",
+      "img": "./easter.jpg",
+      "caption": "Yoyoy lesssgo"
+    },
+    {
+      "day": "Dag 4",
+      "img": "./easter.jpg",
+      "caption": "Yoyoy lesssgo"
+    }, 
+    {
+      "day": "Dag 5",
+      "img": "./easter.jpg",
+      "caption": "Yoyoy lesssgo"
+    }]
+
   const data = [
     { id: 1, name: "John Doe" },
     { id: 2, name: "Victor Wayne" },
@@ -22,7 +47,7 @@ const Mainpage: React.FC = () => {
       width={171}
       height={180}
       alt="171x180"
-      src= "../images/bunny.png"
+      src={require("../../public/images/bunny.png").default}
       />
       </Figure>
       </div>
@@ -32,7 +57,7 @@ const Mainpage: React.FC = () => {
         {dager.map(d => (
           <li className = "flex-child" key = {d.day}>
            <Card style={{ width: '19rem' }}>
-           <Card.Img variant="top" src="../images/js.png" />
+           <Card.Img variant="top" src={require(`../../public/images/js.png`).default} />
           </Card>
           </li>
         ))}
