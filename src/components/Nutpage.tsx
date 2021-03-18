@@ -38,7 +38,7 @@ const Nutpage: React.FC = () => {
     });
     console.log(response);
     setResponse(JSON.stringify(response.data.result));
-    setScore(parseInt(JSON.stringify(response.data.msg)));
+    setScore(Number.parseInt(JSON.stringify(response.data.msg), 10));
   }
 
   return (
