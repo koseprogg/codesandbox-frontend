@@ -43,7 +43,7 @@ const Nutpage: React.FC = () => {
 
   return (
     <div>
-    <h1 id = "header" style = {{textAlign: "center"}}>Påske nøtt dag 1</h1>
+    <h1 id = "header" style = {{textAlign: "center"}}>Påskenøtt, dag 1</h1>
     <div className="page-wrapper">
       
         <div className="codeMirror-editor">
