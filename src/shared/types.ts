@@ -1,9 +1,11 @@
-export interface Example {
-  someTimestamp: Date;
-  someName: string;
-  someOtherInterface: Example2;
-}
+export type Competition = {
+  name: string;
+  image: string;
+  isActive: boolean;
+};
 
-export interface Example2 {
-  message: string;
-}
+export type CompetitionCardProps = {
+  name: string;
+  image: string;
+  isActive: string;
+};

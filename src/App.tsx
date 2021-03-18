@@ -7,14 +7,14 @@ import Nutpage from "./components/Nutpage"
 const App: React.FC = () => {
 
   return(
-    <div>
+    <div style={{ width: '100%', height: '100%' }}>
       <Router>
           <Route path='/' exact render={(props) => (
-          <Mainpage/>)}>
+            <Mainpage/>)}>
           </Route>
-          
-          <Route path='/nutpage' exact render={(props) => (
-          <Nutpage/>)}>
+          <Route exact path='/:name' render={(props) => (
+            <Nutpage />
+          )}>
           </Route>
       </Router>      
 

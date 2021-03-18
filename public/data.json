@@ -1,0 +1,12 @@
+{
+    "competitions": [
+        { 
+            "name": "Påskenøtter 2021", 
+            "image": "../../public/images/easter.jpg"
+        },
+        {
+            "name": "Julenøtter 2021", 
+            "image": "../../public/images/christmas2.jpg"
+        }
+    ]
+}
