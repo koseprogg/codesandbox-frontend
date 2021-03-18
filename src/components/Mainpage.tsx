@@ -1,68 +1,61 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from "react";
-import {Figure, Button, Card} from "react-bootstrap";
-import "./Mainpage.css";
+import React from "react";
+import { Figure } from "react-bootstrap";
+import { Competition } from "../shared/types";
+import ImageCard from "./ImageCard";
+import { useFetch } from '../hooks/useFetch';
+import Axios from 'axios';
+import "./Mainpage.scss";
+
+const abakusLogo = require('../../public/images/abakus_logo_improved.png').default;
+
+const backendUrl = 'http://localhost:3000';
+
+const competitions = [
+  { 
+      name: "Påskenøtter 2021", 
+      image: "https://thumbs.dreamstime.com/b/toy-easter-chickne-2102239.jpg",
+      isActive: true
+  },
+  {
+      name: "Julenøtter 2021", 
+      image: "https://image.forskning.no/122244.jpg?imageId=122244&width=480&height=274",
+      isActive: true
+  },
+  {
+    name: "Ballenøtter 2021", 
+    image: "https://lyngstadernaering.no/wp-content/uploads/2014/06/breads_flavored_with_onion_and_garlic_2.jpg",
+    isActive: true
+}
+];
 
 const Mainpage: React.FC = () => {
+  const [competitions, setCompetitions] = React.useState<Competition[]>([]);
 
-  const dager = [
-    {
-      "day": "Dag 1",
-      "img": "../components/easter.jpg",
-      "caption": "Yoyoy lesssgo"
-    },
-    {
-      "day": "Dag 2",
-      "img": "./easter.jpg",
-      "caption": "Yoyoy lesssgo"
-    },
-    {
-      "day": "Dag 3",
-      "img": "./easter.jpg",
-      "caption": "Yoyoy lesssgo"
-    },
-    {
-      "day": "Dag 4",
-      "img": "./easter.jpg",
-      "caption": "Yoyoy lesssgo"
-    }, 
-    {
-      "day": "Dag 5",
-      "img": "./easter.jpg",
-      "caption": "Yoyoy lesssgo"
-    }]
+  const { response, error } = useFetch(`${backendUrl}/competitions`);
 
-  const data = [
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Victor Wayne" },
-    { id: 3, name: "Jane Doe" },
-  ];
-  data.map(d=>{console.log(d.name)});
+  React.useEffect(() => {
+    if (response != null && !error) {
+      setCompetitions(response);
+    }
+  })
 
   return (
-    <div>
-      <div id="main-bunny">
-      <Figure>
-      <Figure.Image
-      width={171}
-      height={180}
-      alt="171x180"
-      src={require("../../public/images/bunny.png").default}
-      />
-      </Figure>
+    <div id="mainpage">
+      <div className="main-header-container">
+        <h1 className="main-heading">Kodenøtter</h1>
+        <img height="50" src={abakusLogo} alt={'abakuslogo'} />
       </div>
-      <h1 id = "mainpage-title">Abakus påseknøtt 2021</h1>
-
-      <ul id = "flex-parent">
-        {dager.map(d => (
-          <li className = "flex-child" key = {d.day}>
-           <Card style={{ width: '19rem' }}>
-           <Card.Img variant="top" src={require(`../../public/images/js.png`).default} />
-          </Card>
-          </li>
-        ))}
-      </ul>
-
+      <div className="competition-container">
+        {competitions && competitions.map((competition, i: number) => {
+            return <ImageCard 
+                      key={i}
+                      name={competition.name} 
+                      image={competition.image} 
+                      isActive={competition.isActive} 
+                    />
+          })}
+      </div>
     </div>
   );
 };
