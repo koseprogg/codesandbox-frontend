@@ -4,8 +4,10 @@ export type Competition = {
   isActive: boolean;
 };
 
-export type CompetitionCardProps = {
+export type ImageCardProps = {
   name: string;
   image: string;
   isActive: string;
+  isTask: boolean;
+  day?: number;
 };

@@ -3,26 +3,14 @@ import React, { useState, useEffect } from "react";
 import "./Nutpage.css";
 import axios from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import codemirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/theme/neat.css";
 import "codemirror/mode/javascript/javascript.js";
-import { Alert, Button, Row, Col, Container } from "react-bootstrap";
+import { Alert, Button } from "react-bootstrap";
 
 const Nutpage: React.FC = () => {
-  const [code, setCode] = useState(`const fibo = (n) => {
-    const numbers = [];
-    
-    while (numbers.length < n) {
-      numbers.push(numbers.length === 0 ? 0 : numbers.length === 1 ? 1 : (numbers[numbers.length - 1] + numbers[numbers.length - 2]))
-    }
-    
-    return numbers;
-  }
-  
-  fibo(n);
-  `);
+  const [code, setCode] = useState('');
   const [response, setResponse] = useState("");
   const [score, setScore] = useState<number>();
 
@@ -32,7 +20,7 @@ const Nutpage: React.FC = () => {
   }
 
   async function sendCode() {
-    const url = "http://localhost:3000";
+    const url = "http://localhost:3000/competitions/nuts/Påskenøtt/6";
     const response = await axios.post(url, {
       code: code,
     });

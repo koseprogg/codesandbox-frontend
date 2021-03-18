@@ -2,7 +2,7 @@
 import React from "react";
 import { Figure } from "react-bootstrap";
 import { Competition } from "../shared/types";
-import CompetitionCard from "./CompetitionCard";
+import ImageCard from "./ImageCard";
 import { useFetch } from '../hooks/useFetch';
 import Axios from 'axios';
 import "./Mainpage.scss";
@@ -35,7 +35,6 @@ const Mainpage: React.FC = () => {
   const { response, error } = useFetch(`${backendUrl}/competitions`);
 
   React.useEffect(() => {
-    console.log('løk');
     if (response != null && !error) {
       setCompetitions(response);
     }
@@ -49,7 +48,7 @@ const Mainpage: React.FC = () => {
       </div>
       <div className="competition-container">
         {competitions && competitions.map((competition, i: number) => {
-            return <CompetitionCard 
+            return <ImageCard 
                       key={i}
                       name={competition.name} 
                       image={competition.image} 

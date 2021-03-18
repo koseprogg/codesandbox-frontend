@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import CompetitionPage from "./components/CompetitionPage";
 import Mainpage from "./components/Mainpage";
 import Nutpage from "./components/Nutpage"
 
@@ -13,6 +14,10 @@ const App: React.FC = () => {
             <Mainpage/>)}>
           </Route>
           <Route exact path='/:name' render={(props) => (
+            <CompetitionPage />
+          )}>
+          </Route>
+          <Route exact path='/:name/day/:day' render={(props) => (
             <Nutpage />
           )}>
           </Route>
