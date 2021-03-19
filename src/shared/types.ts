@@ -4,10 +4,26 @@ export type Competition = {
   isActive: boolean;
 };
 
-export type ImageCardProps = {
+export interface ImageCardProps {
   name: string;
   image: string;
-  isActive: string;
   isTask: boolean;
   day?: number;
+}
+
+export type Task = {
+  name: string;
+  day: number;
+  _id: string;
+  description: string;
+  image: string;
+  subTasks: string[];
 };
+
+export interface CompetitionCardProps extends ImageCardProps {
+  isActive: string;
+}
+
+export interface TaskCardProps extends ImageCardProps {
+  isActive: string;
+}

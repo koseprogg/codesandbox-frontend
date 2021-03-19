@@ -13,6 +13,7 @@ const Nutpage: React.FC = () => {
   const [code, setCode] = useState('');
   const [response, setResponse] = useState("");
   const [score, setScore] = useState<number>();
+  const [errorMsg, setErrorMsg] = useState("");
 
   function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const inputValue = `${event.target.value}`;
@@ -27,8 +28,17 @@ const Nutpage: React.FC = () => {
     console.log(response);
     setResponse(JSON.stringify(response.data.result));
     setScore(Number.parseInt(JSON.stringify(response.data.msg), 10));
+    setErrorMsg(JSON.stringify(response.data.msg));
   }
 
+  const displayErrorMessage = () => {
+    return errorMsg !== "" ? 
+    ( <Alert variant="danger">
+        Error message: {errorMsg} 
+      </Alert>
+    ) : <React.Fragment />
+  }
+  
   return (
     <div>
     <h1 id = "header" style = {{textAlign: "center"}}>Påskenøtt, dag 1</h1>
@@ -55,6 +65,7 @@ const Nutpage: React.FC = () => {
         {score && <Alert variant="warning">
           {`Score: ${score}%`}
         </Alert>}
+        {displayErrorMessage()}
         <Button onClick={sendCode} variant="primary">Send kode</Button>  
       </div>
         

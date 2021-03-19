@@ -1,7 +1,13 @@
 import React from "react";
-import { ImageCardProps } from "../shared/types";
+import {
+  ImageCardProps,
+  TaskCardProps,
+  CompetitionCardProps,
+} from "../../shared/types";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
+
+// type ImageCardProps = TaskCardProps | CompetitionCardProps;
 
 const ImageCard = (props: ImageCardProps) => {
   const history = useHistory();

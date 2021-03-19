@@ -1,16 +1,21 @@
 import React from "react";
-import ImageCard from "./ImageCard";
+import ImageCard from "./ImageCard/ImageCard";
 import { useRouteMatch } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
+import { Task } from "../shared/types";
 
 const backendUrl = "http://localhost:3000";
 
+interface MatchParams {
+  name: string;
+}
+
 const CompetitionPage = () => {
-  const [tasks, setTasks] = React.useState();
-  const match = useRouteMatch();
+  const [tasks, setTasks] = React.useState<Task[]>();
+  const match = useRouteMatch<MatchParams>("/:name");
 
   const { response, error } = useFetch(
-    `${backendUrl}/competitions/${match.params.name}`
+    `${backendUrl}/competitions/${match?.params.name}`
   );
 
   React.useEffect(() => {
@@ -21,7 +26,7 @@ const CompetitionPage = () => {
 
   return (
     <div>
-      <h1 className="main-heading">{match.params.name}</h1>
+      <h1 className="main-heading">{match?.params.name}</h1>
       <div className="competition-container">
         {tasks &&
           tasks.map((task, i: number) => {
@@ -31,7 +36,7 @@ const CompetitionPage = () => {
                 key={i}
                 name={task.name}
                 image={task.image}
-                isActive={true}
+                // isActive={true}
                 isTask={true}
                 day={task.day}
               />

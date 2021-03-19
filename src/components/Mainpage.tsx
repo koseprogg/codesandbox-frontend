@@ -2,7 +2,7 @@
 import React from "react";
 import { Figure } from "react-bootstrap";
 import { Competition } from "../shared/types";
-import ImageCard from "./ImageCard";
+import ImageCard from "./ImageCard/ImageCard";
 import { useFetch } from '../hooks/useFetch';
 import Axios from 'axios';
 import "./Mainpage.scss";
@@ -52,7 +52,8 @@ const Mainpage: React.FC = () => {
                       key={i}
                       name={competition.name} 
                       image={competition.image} 
-                      isActive={competition.isActive} 
+                      isTask={false}
+                      // isActive={competition.isActive} 
                     />
           })}
       </div>
