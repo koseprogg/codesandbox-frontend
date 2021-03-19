@@ -19,7 +19,9 @@ const App: React.FC = () => {
 
   return(
     <div>
-      <Router><AuthProvider>
+      <Router>
+        
+        <AuthProvider>
             <Switch>
               <PrivateRoute exact path="/" component={Mainpage} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />

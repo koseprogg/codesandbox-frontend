@@ -5,8 +5,8 @@ import { Link, useHistory } from "react-router-dom"
 
 const Dashboard: React.FC = () => {
 
-  const [error, setError] = useState("")
-  const { currentUser, logout } = useAuth()
+  const [error, setError] = useState<string>("");
+  const { currentUser, logout } = useAuth();
   const history = useHistory()
 
   async function handleLogout() {
