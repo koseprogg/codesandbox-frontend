@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from "react";
 import "./Nutpage.css";
@@ -7,13 +8,32 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/theme/neat.css";
 import "codemirror/mode/javascript/javascript.js";
+import { Task } from '../shared/types';
+import { useFetch } from "../hooks/useFetch";
 import { Alert, Button } from "react-bootstrap";
+import { useRouteMatch } from "react-router-dom";
+
+const backendUrl = 'http://localhost:3000'
 
 const Nutpage: React.FC = () => {
+  const [task, setTask] = useState<Task>();
   const [code, setCode] = useState('');
-  const [response, setResponse] = useState("");
   const [score, setScore] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
+
+  const match = useRouteMatch();
+
+  const { response, error } = match
+    ? useFetch(`${backendUrl}/competitions/${match.params.name}/day/${match.params.day}`)
+    : null;
+
+
+  React.useEffect(() => {
+    if (response != null && !error) {
+      const task: Task = response.tasks[0];
+      setTask(task);
+    }
+  });
 
   function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const inputValue = `${event.target.value}`;
@@ -26,7 +46,6 @@ const Nutpage: React.FC = () => {
       code: code,
     });
     console.log(response);
-    setResponse(JSON.stringify(response.data.result));
     setScore(Number.parseInt(JSON.stringify(response.data.msg), 10));
     setErrorMsg(JSON.stringify(response.data.msg));
   }
@@ -38,50 +57,50 @@ const Nutpage: React.FC = () => {
       </Alert>
     ) : <React.Fragment />
   }
+
+  console.log(task);
   
-  return (
+  return task && match ? (
     <div>
-    <h1 id = "header" style = {{textAlign: "center"}}>Påskenøtt, dag 1</h1>
-    <div className="page-wrapper">
-      
-        <div className="codeMirror-editor">
-        <CodeMirror
-          value={code}
-          options={{
-            mode: "javascript",
-            theme: "material",
-            lineNumbers: true,
-          }}
-          onBeforeChange={(editor, data, value) => {
-            setCode(value);
-          }}
-          onChange={(editor, data, value) => {
-            setCode(value);
-          }}
-        />
-        <Alert variant="warning">
-          Output: {response} 
-        </Alert>
-        {score && <Alert variant="warning">
+      <h1 className="main-heading">{`Dag ${match.params.day}: ${task.name}`}</h1>
+      <div className="task-container">
+        <div className="code-editor-container">
+          <CodeMirror
+            value={code}
+            options={{
+              mode: "javascript",
+              theme: "material",
+              lineNumbers: true,
+            }}
+            onBeforeChange={(editor, data, value) => {
+              setCode(value);
+            }}
+            onChange={(editor, data, value) => {
+              setCode(value);
+            }}
+          />
+        </div>
+        <div className="task-description-container">
+          <span className="task-description">{task.description}</span>
+          <div className="subtask-container">
+            <li>
+              {task.subtasks.map((subtask, i) => <ul key={i}>{subtask}</ul>)}
+            </li>
+          </span>
+        </div>
+      </div>
+      <div className="codeMirror-editor">
+        
+        {score && <Alert variant="primary">
           {`Score: ${score}%`}
         </Alert>}
         {displayErrorMessage()}
         <Button onClick={sendCode} variant="primary">Send kode</Button>  
       </div>
-        
-        <div>
-        <h1 id= "opp-header">Oppgavetekst</h1>
-        <p style={{color: 'black'}}> Skriv og kjør en funksjon som tar inn ett argument som heter n. Funksjonen skal returnere en liste med
-          tallene i Fibonacci-rekken til og med det n-te tallet. For eksempel, ved n = 10 skal
-          funksjonen returnere [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]. 
-        </p>
-      </div>
-        
-      
-      
     </div>
-    </div>
-  );
+  ) : <div>
+        <p>Laster ...</p>
+      </div>;
 };
 
 export default Nutpage;

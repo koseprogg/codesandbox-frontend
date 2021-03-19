@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
 import ImageCard from "./ImageCard/ImageCard";
 import { useRouteMatch } from "react-router-dom";
@@ -14,13 +15,14 @@ const CompetitionPage = () => {
   const [tasks, setTasks] = React.useState<Task[]>();
   const match = useRouteMatch<MatchParams>("/:name");
 
-  const { response, error } = useFetch(
-    `${backendUrl}/competitions/${match?.params.name}`
-  );
+  const { response, error } = match
+    ? useFetch(`${backendUrl}/competitions/${match?.params.name}`)
+    : undefined;
 
   React.useEffect(() => {
     if (response != null && !error) {
-      setTasks(response.tasks);
+      const tasks: Task[] = response.tasks;
+      setTasks(tasks);
     }
   });
 
@@ -30,7 +32,6 @@ const CompetitionPage = () => {
       <div className="competition-container">
         {tasks &&
           tasks.map((task, i: number) => {
-            console.log(tasks);
             return (
               <ImageCard
                 key={i}
