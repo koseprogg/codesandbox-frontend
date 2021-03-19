@@ -7,11 +7,16 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 const path = require("path");
 const smp = new SpeedMeasurePlugin();
 
 module.exports = () => {
+  console.log(process.env.NODE_ENV);
+  const isProd = process.env.NODE_ENV;
+
   const config = {
     entry: "./src/index.tsx",
     module: {
@@ -37,7 +42,7 @@ module.exports = () => {
     output: {
       filename: "bundle.js",
       path: path.resolve(__dirname, "dist"),
-      publicPath: "/",
+      // publicPath: "/",
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -47,6 +52,28 @@ module.exports = () => {
       new CleanWebpackPlugin(),
     ],
   };
+
+  if (isProd) {
+    return smp.wrap({
+      ...config,
+      mode: "production",
+      devtool: "source-map",
+      performance: {
+        // https://web.dev/your-first-performance-budget/#budget-for-quantity-based-metrics
+        hints: "warning",
+        maxEntrypointSize: 170 * 1024,
+        maxAssetSize: 450 * 1024,
+      },
+      plugins: [
+        ...config.plugins,
+        process.env.ANALYZE &&
+          new BundleAnalyzerPlugin({
+            generateStatsFile: true,
+            analyzerMode: "disabled",
+          }),
+      ].filter(Boolean),
+    });
+  }
 
   return smp.wrap({
     ...config,
