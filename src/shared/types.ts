@@ -17,7 +17,7 @@ export type Task = {
   _id: string;
   description: string;
   image: string;
-  subTasks: string[];
+  subtasks: string[];
 };
 
 export interface CompetitionCardProps extends ImageCardProps {

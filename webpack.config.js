@@ -1,9 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
@@ -14,7 +8,6 @@ const path = require("path");
 const smp = new SpeedMeasurePlugin();
 
 module.exports = () => {
-  console.log(process.env.NODE_ENV);
   const isProd = process.env.NODE_ENV;
 
   const config = {
@@ -42,7 +35,7 @@ module.exports = () => {
     output: {
       filename: "bundle.js",
       path: path.resolve(__dirname, "dist"),
-      // publicPath: "/",
+      publicPath: "/",
     },
     plugins: [
       new HtmlWebpackPlugin({

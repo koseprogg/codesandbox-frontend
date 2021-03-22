@@ -15,13 +15,18 @@ import { useRouteMatch } from "react-router-dom";
 
 const backendUrl = 'http://localhost:3000'
 
+interface MatchParams {
+  name: string;
+  day: string;
+}
+
 const Nutpage: React.FC = () => {
   const [task, setTask] = useState<Task>();
   const [code, setCode] = useState('');
   const [score, setScore] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
 
-  const match = useRouteMatch();
+  const match = useRouteMatch<MatchParams>('/:name/day/:day');
 
   const { response, error } = match
     ? useFetch(`${backendUrl}/competitions/${match.params.name}/day/${match.params.day}`)
@@ -84,9 +89,9 @@ const Nutpage: React.FC = () => {
           <span className="task-description">{task.description}</span>
           <div className="subtask-container">
             <li>
-              {task.subtasks.map((subtask, i) => <ul key={i}>{subtask}</ul>)}
+              {task.subtasks.map((subtask: string, i: number) => <ul key={i}>{subtask}</ul>)}
             </li>
-          </span>
+          </div>
         </div>
       </div>
       <div className="codeMirror-editor">
