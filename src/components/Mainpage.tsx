@@ -6,6 +6,7 @@ import ImageCard from "./ImageCard/ImageCard";
 import { useFetch } from '../hooks/useFetch';
 import Axios from 'axios';
 import "./Mainpage.scss";
+import CustomTable from "./CustomTable";
 
 const abakusLogo = require('../../public/images/abakus_logo_improved.png').default;
 
@@ -58,9 +59,10 @@ const Mainpage: React.FC = () => {
           />
         })
           :
-          <p>
-            No competition to show. Backend server might be down.
-          </p>}
+          <div>
+            <CustomTable/>
+          </div>
+          }
       </div>
     </div>
   );
