@@ -44,6 +44,7 @@ const Mainpage: React.FC = () => {
 
   return (
     <div id="mainpage">
+
       <div className="main-header-container">
         <h1 className="main-heading">Kodenøtter</h1>
         <img height="50" src={abakusLogo} alt={'abakuslogo'} />
@@ -60,7 +61,7 @@ const Mainpage: React.FC = () => {
         })
           :
           <div>
-            <CustomTable/>
+            Ingen nøtt å finne.
           </div>
           }
       </div>
