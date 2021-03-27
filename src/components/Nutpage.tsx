@@ -42,6 +42,15 @@ const Nutpage: React.FC = () => {
       const task: Task = response.tasks[0];
       setTask(task);
     }
+
+    if(match?.params.day!= null) {
+      const day = match.params.day
+      const store = "code" + day
+      const code = localStorage.getItem(store);
+      if(code!=null){
+      setCode(code)}
+    }
+
   });
 
   function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -50,6 +59,12 @@ const Nutpage: React.FC = () => {
   }
 
   async function sendCode() {
+    if(match?.params.day!= null) {
+      const day = match.params.day
+      const store = "code" + day
+      localStorage.setItem(store, code);
+    }
+  
     if (!match?.params.name || !match.params.day) {
       setErrorMsg("Could not parse competition name and/or day");
       return;
