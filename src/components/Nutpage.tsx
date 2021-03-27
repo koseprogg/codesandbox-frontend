@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import "./Nutpage.css";
 import axios from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -9,8 +9,9 @@ import "codemirror/theme/neat.css";
 import "codemirror/mode/javascript/javascript.js";
 import { Task } from "../shared/types";
 import { useFetch } from "../hooks/useFetch";
-import { Alert, Button } from "react-bootstrap";
+import { Alert, Button, Modal } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
+import CustomTable from "./CustomTable";
 
 const backendUrl = "http://localhost:3000";
 
@@ -24,6 +25,9 @@ const Nutpage: React.FC = () => {
   const [code, setCode] = useState("");
   const [score, setScore] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const match = useRouteMatch<MatchParams>("/:name/day/:day");
 
@@ -74,8 +78,29 @@ const Nutpage: React.FC = () => {
   return task && match ? (
     <div>
       <h1 className="main-heading">{`Dag ${match.params.day}: ${task.name}`}</h1>
+      <>
+      <div className="main-heading">
+      <Button variant="primary" onClick={handleShow}>
+        Se ledertavle
+      </Button>
+      </div>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{`Dag ${match.params.day}: ${task.name}`}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CustomTable/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Lukk
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
       <div className="task-container">
-        <div className="code-editor-container">
+        <div className="nutpage-middle">
           <CodeMirror
             value={code}
             options={{
@@ -92,22 +117,25 @@ const Nutpage: React.FC = () => {
           />
         </div>
         <div className="task-description-container">
-          <span className="task-description">{task.description}</span>
-          <div className="subtask-container">
-            <li>
+          <span className="task-description nutpage-middle">{task.description}</span>
+          <div className="subtask-container nutpage-middle">
+            <ul>
               {task.subtasks.map((subtask: string, i: number) => (
-                <ul key={i}>{subtask}</ul>
+                <li key={i}>{subtask}</li>
               ))}
-            </li>
+            </ul>
           </div>
         </div>
       </div>
       <div className="codeMirror-editor">
-        {score && <Alert variant="primary">{`Score: ${score}%`}</Alert>}
-        {displayErrorMessage()}
-        <Button onClick={sendCode} variant="primary">
+        <Button className = "nutpage-middle" onClick={sendCode} variant="primary">
           Send kode
         </Button>
+      </div>
+      <div className = "nutpage-middle">
+      Output: 
+      { score && <Alert variant="primary">{`Score: ${score}%`}</Alert>}
+      { displayErrorMessage()}
       </div>
     </div>
   ) : (
