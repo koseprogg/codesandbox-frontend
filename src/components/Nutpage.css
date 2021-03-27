@@ -24,9 +24,11 @@ body,
 #opp.header {
   margin-left: 30px;
 }
-
-.codeMirror-editor {
-  width: 800px;
+ 
+.code-editor-container {
+  margin-top: 1%;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 .react-codemirror2,

@@ -70,7 +70,6 @@ const Nutpage: React.FC = () => {
     );
   };
 
-  console.log(task);
 
   return task && match ? (
     <div>
