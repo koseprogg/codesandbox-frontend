@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState } from "react";
 import "./Nutpage.css";
 import axios from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -12,6 +12,7 @@ import { useFetch } from "../hooks/useFetch";
 import { Alert, Button, Modal } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
 import CustomTable from "./CustomTable";
+import _ from "lodash";
 
 const backendUrl = "http://localhost:3000";
 
@@ -44,27 +45,23 @@ const Nutpage: React.FC = () => {
     }
 
     if (match?.params.day != null) {
-      const day = match.params.day;
-      const store = "code" + day;
-      const code = localStorage.getItem(store);
-      if (code != null) {
-        setCode(code);
+      const { day, name } = match.params;
+      const store = `code-${name}-${day}`;
+      const localCode = localStorage.getItem(store);
+      if (!code && localCode != null) {
+        setCode(localCode);
       }
     }
-  });
+  }, [response]);
 
-  function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    const inputValue = `${event.target.value}`;
-    setCode(inputValue);
-  }
+  const saveCodeLocal = _.debounce(() => {
+    if (match?.params == null) return;
+    const { day, name } = match.params;
+    const store = `code-${name}-${day}`;
+    localStorage.setItem(store, code);
+  }, 500);
 
   async function sendCode() {
-    if (match?.params.day != null) {
-      const day = match.params.day;
-      const store = "code" + day;
-      localStorage.setItem(store, code);
-    }
-
     if (!match?.params.name || !match.params.day) {
       setErrorMsg("Could not parse competition name and/or day");
       return;
@@ -124,9 +121,7 @@ const Nutpage: React.FC = () => {
             }}
             onBeforeChange={(editor, data, value) => {
               setCode(value);
-            }}
-            onChange={(editor, data, value) => {
-              setCode(value);
+              saveCodeLocal();
             }}
           />
         </div>
