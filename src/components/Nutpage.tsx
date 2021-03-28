@@ -9,15 +9,28 @@ import "codemirror/theme/neat.css";
 import "codemirror/mode/javascript/javascript.js";
 import { Task } from "../shared/types";
 import { useFetch } from "../hooks/useFetch";
-import { Alert, Button, Modal } from "react-bootstrap";
+import { useAuth } from "../hooks/useAuth";
+import { Alert, Button } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
-import CustomTable from "./CustomTable";
+import LeaderBoard from "./LeaderBoard";
 import _ from "lodash";
 import config from "../config";
 
 interface MatchParams {
   name: string;
   day: string;
+}
+
+interface Day {
+  tasks: Task[];
+}
+interface CodeRes {
+  msg?: string;
+  result?: {
+    score: number;
+    possibleScore: number;
+    achievedScore: number;
+  };
 }
 
 const Nutpage: React.FC = () => {
@@ -32,17 +45,19 @@ const Nutpage: React.FC = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const { user } = useAuth();
+
   const match = useRouteMatch<MatchParams>("/:name/day/:day");
 
   const { response, error } = match
-    ? useFetch(
+    ? useFetch<Day>(
         `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`
       )
-    : null;
+    : { response: null, error: null };
 
   React.useEffect(() => {
     if (response != null && !error) {
-      const task: Task = response.tasks[0];
+      const task = response.tasks[0];
       setTask(task);
     }
 
@@ -71,9 +86,16 @@ const Nutpage: React.FC = () => {
     }
     setErrorMsg("");
     const url = `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`;
-    const response = await axios.post(url, {
-      code: code,
-    });
+    const axconfig = user
+      ? { headers: { Authorization: `JWT ${user?.accessToken}` } }
+      : undefined;
+    const response = await axios.post<CodeRes>(
+      url,
+      {
+        code: code,
+      },
+      axconfig
+    );
     setIsFetching(false);
     console.log(response.data);
     if (response.status === 200 && response.data) {
@@ -113,27 +135,11 @@ const Nutpage: React.FC = () => {
   return task && match ? (
     <div>
       <h1 className="main-heading">{`Dag ${match.params.day}: ${task.name}`}</h1>
-      <>
-        <div className="main-heading">
-          <Button variant="primary" onClick={handleShow}>
-            Se ledertavle
-          </Button>
-        </div>
-
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>{`Dag ${match.params.day}: ${task.name}`}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <CustomTable />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Lukk
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
+      <LeaderBoard
+        day={match.params.day}
+        name={match.params.name}
+        task={task.name}
+      />
       <div className="task-container">
         <div className="nutpage-middle">
           <CodeMirror

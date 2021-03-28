@@ -1,11 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export const useFetch = (url: string): any => {
-  const [response, setResponse] = useState<any>(null);
+type Fetch<ResType> = { response: ResType | null; error: string | null };
+
+export const useFetch = <ResType extends unknown>(
+  url: string
+): Fetch<ResType> => {
+  const [response, setResponse] = useState<ResType | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     const fetchData = async () => {
