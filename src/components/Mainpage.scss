@@ -1,6 +1,10 @@
 /*Mainpage styling */
 
+@import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap');
+
 $primary-font-black: #292929;
+$primary-font-light: #e8e8e8;
+$primary-bg-dark: #444;
 
 body {
   background-color: #f4f2f2;
@@ -40,6 +44,7 @@ body {
   width: 47%;
   flex-direction: row;
   transition: transform .3s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05);
@@ -64,14 +69,32 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  padding-top: 10%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: $primary-bg-dark;
   margin-bottom: 5%;
+}
+
+.header-main-heading {
+  color: $primary-font-light;
+  font-family: "Kiwi Maru", serif;
+  justify-content: left;
+  display: flex;
+  margin-bottom: 0;
+  width: 250px;
 }
 
 .main-heading {
   color: $primary-font-black;
   justify-content: center;
+  font-family: "Kiwi Maru", serif;
   display: flex;
   margin-bottom: 0;
   padding-top: 18px;
+}
+
+.profile-image {
+  width: 250px;
+  display: flex;
+  justify-content: right;
 }
