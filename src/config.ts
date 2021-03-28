@@ -1,5 +1,6 @@
 const config = {
-  backendUrl: process.env.BACKEND_URL || "http://localhost:3000",
+  NODE_ENV: process.env.NODE_ENV,
+  BACKEND_URL: process.env.BACKEND_URL,
 };
 
 export default config;

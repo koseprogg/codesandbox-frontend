@@ -33,7 +33,7 @@ const Nutpage: React.FC = () => {
 
   const { response, error } = match
     ? useFetch(
-        `${config.backendUrl}/competitions/${match.params.name}/day/${match.params.day}`
+        `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`
       )
     : null;
 
@@ -65,7 +65,7 @@ const Nutpage: React.FC = () => {
       setErrorMsg("Could not parse competition name and/or day");
       return;
     }
-    const url = `${config.backendUrl}/competitions/${match.params.name}/day/${match.params.day}`;
+    const url = `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`;
     const response = await axios.post(url, {
       code: code,
     });

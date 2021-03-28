@@ -8,7 +8,7 @@ import config from "../config";
 const Mainpage: React.FC = () => {
   const [competitions, setCompetitions] = React.useState<Competition[]>([]);
 
-  const { response, error } = useFetch(`${config.backendUrl}/competitions`);
+  const { response, error } = useFetch(`${config.BACKEND_URL}/competitions`);
 
   React.useEffect(() => {
     if (response != null && !error) {

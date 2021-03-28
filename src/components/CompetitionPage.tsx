@@ -14,7 +14,7 @@ const CompetitionPage = () => {
   const match = useRouteMatch<MatchParams>("/:name");
 
   const { response, error } = match
-    ? useFetch(`${config.backendUrl}/competitions/${match?.params.name}`)
+    ? useFetch(`${config.BACKEND_URL}/competitions/${match?.params.name}`)
     : undefined;
 
   React.useEffect(() => {

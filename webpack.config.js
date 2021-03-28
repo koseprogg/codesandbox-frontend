@@ -45,7 +45,11 @@ module.exports = () => {
       publicPath: "/",
     },
     plugins: [
-      new webpack.EnvironmentPlugin(["NODE_ENV", "BACKEND_URL"]),
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: "development",
+        BACKEND_URL: "http://localhost:3000",
+      }),
+
       new HtmlWebpackPlugin({
         template: "./src/index.html",
         favicon: "./public/favicon.ico",

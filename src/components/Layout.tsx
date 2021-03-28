@@ -61,7 +61,7 @@ const Layout: React.FC = ({ children }) => {
               </Dropdown>
             </>
           ) : (
-            <Button href={`${config.backendUrl}/auth`}>Logg inn</Button>
+            <Button href={`${config.BACKEND_URL}/auth`}>Logg inn</Button>
           )}
         </div>
       </div>
