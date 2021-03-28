@@ -22,7 +22,11 @@ export const useAuth = (): { user: User | null; logOut: () => void | null } => {
   useEffect(() => {
     const token = Cookies.get("auth");
     if (token) {
-      const userData: { data: User } | null = jwt_decode(token);
+      const userData: { data: User; exp: number } | null = jwt_decode(token);
+      if (userData?.exp && Date.now() >= userData.exp * 1000) {
+        logOut();
+        return;
+      }
       userData && setUser({ ...userData.data, accessToken: token });
     }
   }, []);
