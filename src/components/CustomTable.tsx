@@ -1,85 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Task } from "../shared/types";
-import { Table } from "react-bootstrap";
+import { Table, Alert } from "react-bootstrap";
 
-const hardCodedListWithScores = [
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-];
-const CustomTable: React.FC = () => {
-  const [task, setTask] = useState<Task>();
-  const [errorMsg, setErrorMsg] = useState("");
+type Props = {
+  data?: React.ReactNode;
+  error?: string;
+};
 
+const CustomTable: React.FC<Props> = ({ data, error }: Props) => {
   return (
-    <Table striped bordered hover size="sm">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        {hardCodedListWithScores.map((player) => (
-          <tr key={player.name}>
-            <td>{player.name}</td>
-            <td>{player.value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <>
+      {!error && data ? (
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>{data}</tbody>
+        </Table>
+      ) : (
+        <Alert variant="danger">{error}</Alert>
+      )}
+    </>
   );
 };
 

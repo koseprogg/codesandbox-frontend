@@ -4,22 +4,28 @@ import { useRouteMatch } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Task } from "../shared/types";
 import config from "../config";
+import LeaderBoard from "./LeaderBoard";
+
 
 interface MatchParams {
   name: string;
 }
 
-const CompetitionPage = () => {
+interface Competition {
+  tasks: Task[];
+}
+
+const CompetitionPage = (): JSX.Element => {
   const [tasks, setTasks] = React.useState<Task[]>();
   const match = useRouteMatch<MatchParams>("/:name");
 
   const { response, error } = match
-    ? useFetch(`${config.BACKEND_URL}/competitions/${match?.params.name}`)
-    : undefined;
+    ? useFetch<Competition>(`${config.BACKEND_URL}/competitions/${match?.params.name}`)
+    : { response: null, error: null };
 
   React.useEffect(() => {
     if (response != null && !error) {
-      const tasks: Task[] = response.tasks;
+      const tasks = response.tasks;
       setTasks(tasks);
     }
   });
@@ -27,6 +33,7 @@ const CompetitionPage = () => {
   return (
     <div>
       <h1 className="main-heading">{match?.params.name}</h1>
+      {match?.params.name && <LeaderBoard name={match?.params.name} />}
       <div className="competition-container">
         {tasks &&
           tasks.map((task, i: number) => {

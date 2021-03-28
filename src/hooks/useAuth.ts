@@ -8,6 +8,7 @@ type User = {
   lastName: string;
   emailAddress: string;
   profilePicture: string;
+  accessToken: string;
 };
 
 export const useAuth = (): { user: User | null; logOut: () => void | null } => {
@@ -22,7 +23,7 @@ export const useAuth = (): { user: User | null; logOut: () => void | null } => {
     const token = Cookies.get("auth");
     if (token) {
       const userData: { data: User } | null = jwt_decode(token);
-      userData && setUser(userData.data);
+      userData && setUser({ ...userData.data, accessToken: token });
     }
   }, []);
 
