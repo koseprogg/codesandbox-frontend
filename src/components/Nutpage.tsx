@@ -175,7 +175,9 @@ const Nutpage: React.FC = () => {
         <span>
           {isFetching ? (
             "Venter på svar ... "
-          ) : score && possibleScore && achievedScore ? (
+          ) : score != undefined &&
+            possibleScore != undefined &&
+            achievedScore != undefined ? (
             <Alert variant={score === 100 ? "success" : "primary"}>
               {score === 100
                 ? `Full pott! Svaret ditt ga ${achievedScore} av ${possibleScore} poeng!! 🎉`
