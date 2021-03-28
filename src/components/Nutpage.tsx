@@ -24,8 +24,11 @@ const Nutpage: React.FC = () => {
   const [task, setTask] = useState<Task>();
   const [code, setCode] = useState("");
   const [score, setScore] = useState<number>();
+  const [possibleScore, setPossibleScore] = useState<number>();
+  const [achievedScore, setAchievedScore] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
   const [show, setShow] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -61,24 +64,47 @@ const Nutpage: React.FC = () => {
   }, 500);
 
   async function sendCode() {
+    setIsFetching(true);
     if (!match?.params.name || !match.params.day) {
       setErrorMsg("Could not parse competition name and/or day");
       return;
     }
+    setErrorMsg("");
     const url = `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`;
     const response = await axios.post(url, {
       code: code,
     });
-    if (response.status != 200) {
-      setErrorMsg(JSON.stringify(response.data?.msg));
-      return;
+    setIsFetching(false);
+    console.log(response.data);
+    if (response.status === 200 && response.data) {
+      if (response.data.msg) {
+        setErrorMsg(JSON.stringify(response.data.msg));
+      }
+      if (response.data.result) {
+        setScore(
+          Number.parseInt(JSON.stringify(response.data.result.score), 10)
+        );
+        setPossibleScore(
+          Number.parseInt(
+            JSON.stringify(response.data.result.possibleScore),
+            10
+          )
+        );
+        setAchievedScore(
+          Number.parseInt(
+            JSON.stringify(response.data.result.achievedScore),
+            10
+          )
+        );
+      }
     }
-    setScore(Number.parseInt(JSON.stringify(response.data?.msg), 10));
   }
 
   const displayErrorMessage = () => {
     return errorMsg !== "" ? (
-      <Alert variant="danger">Error message: {errorMsg}</Alert>
+      <Alert variant="danger">
+        Koden din krasjet med denne feilen: {errorMsg}
+      </Alert>
     ) : (
       <React.Fragment />
     );
@@ -142,9 +168,23 @@ const Nutpage: React.FC = () => {
         </Button>
       </div>
       <div className="nutpage-middle">
-        Output:
-        {score && <Alert variant="primary">{`Score: ${score}%`}</Alert>}
-        {displayErrorMessage()}
+        <h3>Din tilbakemelding</h3>
+        <span>
+          {isFetching ? (
+            "Venter på svar ... "
+          ) : score && possibleScore && achievedScore ? (
+            <Alert variant={score === 100 ? "success" : "primary"}>
+              {score === 100
+                ? `Full pott! Svaret ditt ga ${achievedScore} av ${possibleScore} poeng!! 🎉`
+                : `Svaret ditt ga ${achievedScore} av ${possibleScore} poeng.`}
+            </Alert>
+          ) : errorMsg ? (
+            ""
+          ) : (
+            "Svar på oppgaven over for å få tilbakemelding."
+          )}
+          {displayErrorMessage()}
+        </span>
       </div>
     </div>
   ) : (
