@@ -4,14 +4,13 @@ import { Button, Modal } from "react-bootstrap";
 import { useFetch } from "../hooks/useFetch";
 import { User } from "../shared/types";
 import CustomTable from "./CustomTable";
+import config from "../config";
 
 type Props = {
   name: string;
   day?: string;
   task?: string;
 };
-
-const backendUrl = "http://localhost:3000";
 
 type PlayerScore = {
   _id: string;
@@ -28,8 +27,8 @@ const LeaderBoard = (props: Props): JSX.Element => {
 
   const url =
     day && name
-      ? `${backendUrl}/competitions/${name}/day/${day}/leaderboard`
-      : `${backendUrl}/competitions/${name}/leaderboard`;
+      ? `${config.BACKEND_URL}/competitions/${name}/day/${day}/leaderboard`
+      : `${config.BACKEND_URL}/competitions/${name}/leaderboard`;
   const { response, error } = useFetch<PlayerScore[]>(url);
 
   return (
