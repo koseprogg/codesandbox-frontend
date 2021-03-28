@@ -9,7 +9,7 @@
     "lint:fix": "eslint --fix --ext js --ext jsx --ext ts --ext tsx src",
     "prettier": "prettier --check */**.{ts,js,tsx}",
     "prettier:fix": "prettier --write */**.{ts,js,tsx}",
-    "build": "NODE_ENV=production webpack"
+    "build": "BACKEND_URL=https://xn--pskentter-52a7s.abakus.no/api NODE_ENV=production webpack"
   },
   "repository": {
     "type": "git",
