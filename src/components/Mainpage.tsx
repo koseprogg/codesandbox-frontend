@@ -3,16 +3,12 @@ import { Competition } from "../shared/types";
 import ImageCard from "./ImageCard/ImageCard";
 import { useFetch } from "../hooks/useFetch";
 import "./Mainpage.scss";
-
-const abakusLogo = require("../../public/images/abakus_logo_improved.png")
-  .default;
-
-const backendUrl = "http://localhost:3000";
+import config from "../config";
 
 const Mainpage: React.FC = () => {
   const [competitions, setCompetitions] = React.useState<Competition[]>([]);
 
-  const { response, error } = useFetch(`${backendUrl}/competitions`);
+  const { response, error } = useFetch(`${config.backendUrl}/competitions`);
 
   React.useEffect(() => {
     if (response != null && !error) {

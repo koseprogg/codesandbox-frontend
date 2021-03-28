@@ -8,7 +8,7 @@ const path = require("path");
 const smp = new SpeedMeasurePlugin();
 
 module.exports = () => {
-  const isProd = process.env.NODE_ENV;
+  const isProd = process.env.NODE_ENV == "production";
 
   const config = {
     entry: "./src/index.tsx",

@@ -3,8 +3,7 @@ import ImageCard from "./ImageCard/ImageCard";
 import { useRouteMatch } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { Task } from "../shared/types";
-
-const backendUrl = "http://localhost:3000";
+import config from "../config";
 
 interface MatchParams {
   name: string;
@@ -15,7 +14,7 @@ const CompetitionPage = () => {
   const match = useRouteMatch<MatchParams>("/:name");
 
   const { response, error } = match
-    ? useFetch(`${backendUrl}/competitions/${match?.params.name}`)
+    ? useFetch(`${config.backendUrl}/competitions/${match?.params.name}`)
     : undefined;
 
   React.useEffect(() => {

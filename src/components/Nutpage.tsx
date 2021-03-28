@@ -13,8 +13,7 @@ import { Alert, Button, Modal } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
 import CustomTable from "./CustomTable";
 import _ from "lodash";
-
-const backendUrl = "http://localhost:3000";
+import config from "../config";
 
 interface MatchParams {
   name: string;
@@ -34,7 +33,7 @@ const Nutpage: React.FC = () => {
 
   const { response, error } = match
     ? useFetch(
-        `${backendUrl}/competitions/${match.params.name}/day/${match.params.day}`
+        `${config.backendUrl}/competitions/${match.params.name}/day/${match.params.day}`
       )
     : null;
 
@@ -66,7 +65,7 @@ const Nutpage: React.FC = () => {
       setErrorMsg("Could not parse competition name and/or day");
       return;
     }
-    const url = `${backendUrl}/competitions/${match.params.name}/day/${match.params.day}`;
+    const url = `${config.backendUrl}/competitions/${match.params.name}/day/${match.params.day}`;
     const response = await axios.post(url, {
       code: code,
     });
