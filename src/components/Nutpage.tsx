@@ -40,10 +40,7 @@ const Nutpage: React.FC = () => {
   const [possibleScore, setPossibleScore] = useState<number>();
   const [achievedScore, setAchievedScore] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
-  const [show, setShow] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const { user } = useAuth();
 
