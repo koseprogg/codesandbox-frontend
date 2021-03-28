@@ -2,12 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Image, Dropdown } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
+import config from "../config";
 import "./Mainpage.scss";
 
 const abakusLogo = require("../../public/images/abakus_logo_white_improved.png")
   .default;
-
-const backendUrl = "http://localhost:3000";
 
 type CustomToggleProps = {
   children: React.ReactNode;
@@ -62,7 +61,7 @@ const Layout: React.FC = ({ children }) => {
               </Dropdown>
             </>
           ) : (
-            <Button href={`${backendUrl}/auth`}>Logg inn</Button>
+            <Button href={`${config.BACKEND_URL}/auth`}>Logg inn</Button>
           )}
         </div>
       </div>
