@@ -8,6 +8,8 @@
     "serve": "webpack serve",
     "lint": "eslint --ext js --ext jsx --ext ts --ext tsx src",
     "lint:fix": "eslint --fix --ext js --ext jsx --ext ts --ext tsx src",
+    "prettier": "prettier --check */**.{ts,js,tsx}",
+    "prettier:fix": "prettier --write */**.{ts,js,tsx}",
     "start-prod": "node src/server.js",
     "build": "NODE_ENV=production webpack"
   },

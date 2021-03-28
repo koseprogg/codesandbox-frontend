@@ -43,14 +43,14 @@ const Nutpage: React.FC = () => {
       setTask(task);
     }
 
-    if(match?.params.day!= null) {
-      const day = match.params.day
-      const store = "code" + day
+    if (match?.params.day != null) {
+      const day = match.params.day;
+      const store = "code" + day;
       const code = localStorage.getItem(store);
-      if(code!=null){
-      setCode(code)}
+      if (code != null) {
+        setCode(code);
+      }
     }
-
   });
 
   function handleCodeChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -59,12 +59,12 @@ const Nutpage: React.FC = () => {
   }
 
   async function sendCode() {
-    if(match?.params.day!= null) {
-      const day = match.params.day
-      const store = "code" + day
+    if (match?.params.day != null) {
+      const day = match.params.day;
+      const store = "code" + day;
       localStorage.setItem(store, code);
     }
-  
+
     if (!match?.params.name || !match.params.day) {
       setErrorMsg("Could not parse competition name and/or day");
       return;
@@ -89,31 +89,30 @@ const Nutpage: React.FC = () => {
     );
   };
 
-
   return task && match ? (
     <div>
       <h1 className="main-heading">{`Dag ${match.params.day}: ${task.name}`}</h1>
       <>
-      <div className="main-heading">
-      <Button variant="primary" onClick={handleShow}>
-        Se ledertavle
-      </Button>
-      </div>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{`Dag ${match.params.day}: ${task.name}`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <CustomTable/>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Lukk
+        <div className="main-heading">
+          <Button variant="primary" onClick={handleShow}>
+            Se ledertavle
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </div>
+
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>{`Dag ${match.params.day}: ${task.name}`}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <CustomTable />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Lukk
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
       <div className="task-container">
         <div className="nutpage-middle">
           <CodeMirror
@@ -132,7 +131,9 @@ const Nutpage: React.FC = () => {
           />
         </div>
         <div className="task-description-container">
-          <span className="task-description nutpage-middle">{task.description}</span>
+          <span className="task-description nutpage-middle">
+            {task.description}
+          </span>
           <div className="subtask-container nutpage-middle">
             <ul>
               {task.subtasks.map((subtask: string, i: number) => (
@@ -143,14 +144,14 @@ const Nutpage: React.FC = () => {
         </div>
       </div>
       <div className="codeMirror-editor">
-        <Button className = "nutpage-middle" onClick={sendCode} variant="primary">
+        <Button className="nutpage-middle" onClick={sendCode} variant="primary">
           Send kode
         </Button>
       </div>
-      <div className = "nutpage-middle">
-      Output: 
-      { score && <Alert variant="primary">{`Score: ${score}%`}</Alert>}
-      { displayErrorMessage()}
+      <div className="nutpage-middle">
+        Output:
+        {score && <Alert variant="primary">{`Score: ${score}%`}</Alert>}
+        {displayErrorMessage()}
       </div>
     </div>
   ) : (
