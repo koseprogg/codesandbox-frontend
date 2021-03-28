@@ -10,8 +10,13 @@ type User = {
   profilePicture: string;
 };
 
-export const useAuth = (): { user: User | null } => {
+export const useAuth = (): { user: User | null; logOut: () => void | null } => {
   const [user, setUser] = useState<User | null>(null);
+
+  const logOut = () => {
+    Cookies.remove("auth");
+    setUser(null);
+  };
 
   useEffect(() => {
     const token = Cookies.get("auth");
@@ -21,5 +26,5 @@ export const useAuth = (): { user: User | null } => {
     }
   }, []);
 
-  return { user };
+  return { user, logOut };
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Image } from "react-bootstrap";
+import { Button, Image, Dropdown } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import "./Mainpage.scss";
 
@@ -9,8 +9,30 @@ const abakusLogo = require("../../public/images/abakus_logo_white_improved.png")
 
 const backendUrl = "http://localhost:3000";
 
+type CustomToggleProps = {
+  children: React.ReactNode;
+  onClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+};
+
+const CustomToggle = React.forwardRef(
+  (props: CustomToggleProps, ref: React.Ref<HTMLAnchorElement>) => (
+    <a
+      ref={ref}
+      style={{ cursor: "pointer" }}
+      onClick={(e) => {
+        e.preventDefault();
+        props.onClick(e);
+      }}
+    >
+      {props.children}
+    </a>
+  )
+);
+
+CustomToggle.displayName = "CustomToggle";
+
 const Layout: React.FC = ({ children }) => {
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
 
   return (
     <div id="layout">
@@ -21,7 +43,24 @@ const Layout: React.FC = ({ children }) => {
         <img height="50" src={abakusLogo} alt={"abakuslogo"} />
         <div className="profile-image">
           {user ? (
-            <Image roundedCircle src={user.profilePicture} />
+            <>
+              <Dropdown>
+                <Dropdown.Toggle as={CustomToggle}>
+                  <Image roundedCircle src={user.profilePicture} width={50} />
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    target="_blank"
+                    rel="noreferrer"
+                    href={`https://abakus.no/users/${user?.username}`}
+                  >
+                    {user?.username}
+                    <span className="material-icons">open_in_new</span>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={logOut}>Logg ut</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </>
           ) : (
             <Button href={`${backendUrl}/auth`}>Logg inn</Button>
           )}
