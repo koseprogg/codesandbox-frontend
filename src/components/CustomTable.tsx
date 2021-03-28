@@ -1,67 +1,27 @@
 import React, { useState } from "react";
 
 import { Task } from "../shared/types";
-import { Table } from "react-bootstrap";
+import { Table, Alert } from "react-bootstrap";
+import { useFetch } from "../hooks/useFetch";
 
-const hardCodedListWithScores = [
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-  { name: "Marius", value: 100 },
-  { name: "Mithu", value: 50 },
-  { name: "Åsmund", value: 9999 },
-  { name: "Peder", value: 1000 },
-  { name: "Carl Axel", value: 14 },
-  { name: "Erling", value: 14 },
-  { name: "Lilbro", value: 14 },
-  { name: "Prav", value: 14 },
-  { name: "Axel", value: 14 },
-];
-const CustomTable: React.FC = () => {
-  const [task, setTask] = useState<Task>();
-  const [errorMsg, setErrorMsg] = useState("");
+const backendUrl = "http://localhost:3000";
+
+type Props = {
+  name?: string;
+  day?: string;
+};
+
+type PlayerScore = {
+  _id: string;
+  score: number;
+};
+
+const CustomTable: React.FC<Props> = ({ name, day }: Props) => {
+  const url =
+    day && name
+      ? `${backendUrl}/competitions/${name}/day/${day}/leaderboard`
+      : `${backendUrl}/competitions/leaderboard`;
+  const { response, error } = useFetch(url);
 
   return (
     <Table striped bordered hover size="sm">
@@ -72,12 +32,16 @@ const CustomTable: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {hardCodedListWithScores.map((player) => (
-          <tr key={player.name}>
-            <td>{player.name}</td>
-            <td>{player.value}</td>
-          </tr>
-        ))}
+        {response ? (
+          response.map((player: PlayerScore) => (
+            <tr key={player._id}>
+              <td>{player._id}</td>
+              <td>{player.score}</td>
+            </tr>
+          ))
+        ) : (
+          <Alert variant="danger">{error}</Alert>
+        )}
       </tbody>
     </Table>
   );

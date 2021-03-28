@@ -99,7 +99,7 @@ const Nutpage: React.FC = () => {
             <Modal.Title>{`Dag ${match.params.day}: ${task.name}`}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <CustomTable />
+            <CustomTable day={match?.params.day} name={match?.params.name} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
