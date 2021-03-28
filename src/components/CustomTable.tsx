@@ -1,49 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Task } from "../shared/types";
 import { Table, Alert } from "react-bootstrap";
-import { useFetch } from "../hooks/useFetch";
-
-const backendUrl = "http://localhost:3000";
 
 type Props = {
-  name?: string;
-  day?: string;
+  data?: React.ReactNode;
+  error?: string;
 };
 
-type PlayerScore = {
-  _id: string;
-  score: number;
-};
-
-const CustomTable: React.FC<Props> = ({ name, day }: Props) => {
-  const url =
-    day && name
-      ? `${backendUrl}/competitions/${name}/day/${day}/leaderboard`
-      : `${backendUrl}/competitions/leaderboard`;
-  const { response, error } = useFetch(url);
-
+const CustomTable: React.FC<Props> = ({ data, error }: Props) => {
   return (
-    <Table striped bordered hover size="sm">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        {response ? (
-          response.map((player: PlayerScore) => (
-            <tr key={player._id}>
-              <td>{player._id}</td>
-              <td>{player.score}</td>
+    <>
+      {!error && data ? (
+        <Table striped bordered hover size="sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
             </tr>
-          ))
-        ) : (
-          <Alert variant="danger">{error}</Alert>
-        )}
-      </tbody>
-    </Table>
+          </thead>
+          <tbody>{data}</tbody>
+        </Table>
+      ) : (
+        <Alert variant="danger">{error}</Alert>
+      )}
+    </>
   );
 };
 

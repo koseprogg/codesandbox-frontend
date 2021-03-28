@@ -27,3 +27,11 @@ export interface CompetitionCardProps extends ImageCardProps {
 export interface TaskCardProps extends ImageCardProps {
   isActive: string;
 }
+
+export interface User {
+  username: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+  emailAddress: string;
+}
