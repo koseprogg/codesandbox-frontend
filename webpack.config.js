@@ -6,6 +6,7 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 
 const path = require("path");
 const smp = new SpeedMeasurePlugin();
+const webpack = require("webpack");
 
 module.exports = () => {
   const isProd = process.env.NODE_ENV == "production";
@@ -31,6 +32,12 @@ module.exports = () => {
     },
     resolve: {
       extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],
+      alias: {
+        process: "process/browser",
+      },
+      fallback: {
+        process: require.resolve("process/browser"),
+      },
     },
     output: {
       filename: "bundle.js",
@@ -38,11 +45,15 @@ module.exports = () => {
       publicPath: "/",
     },
     plugins: [
+      new webpack.EnvironmentPlugin(["NODE_ENV", "BACKEND_URL"]),
       new HtmlWebpackPlugin({
         template: "./src/index.html",
         favicon: "./public/favicon.ico",
       }),
       new CleanWebpackPlugin(),
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+      }),
     ],
   };
 
