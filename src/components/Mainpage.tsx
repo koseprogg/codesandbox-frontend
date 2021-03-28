@@ -14,7 +14,6 @@ const Mainpage: React.FC = () => {
     if (response != null && !error) {
       setCompetitions(response);
     }
-    console.log("competitions is: ", competitions);
   });
 
   return (

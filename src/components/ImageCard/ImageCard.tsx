@@ -13,7 +13,6 @@ const ImageCard = (props: ImageCardProps) => {
   const history = useHistory();
   const match = useRouteMatch();
 
-  console.log("match:", match);
   return (
     <div
       className="competition-card"

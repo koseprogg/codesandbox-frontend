@@ -69,7 +69,6 @@ const Nutpage: React.FC = () => {
     const response = await axios.post(url, {
       code: code,
     });
-    console.log(response);
     if (response.status != 200) {
       setErrorMsg(JSON.stringify(response.data?.msg));
       return;
