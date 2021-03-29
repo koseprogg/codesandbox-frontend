@@ -1,6 +1,6 @@
 /*Mainpage styling */
-
-@import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap');
+@import "../styles/mediaqueries.scss";
+@import url("https://fonts.googleapis.com/css2?family=Kiwi+Maru&display=swap");
 
 $primary-font-black: #292929;
 $primary-font-light: #e8e8e8;
@@ -28,6 +28,10 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  @media screen and (max-width: $breakpointMobileMax) {
+    flex-direction: column;
+  }
 }
 
 .competition-card {
@@ -43,17 +47,28 @@ body {
   display: flex;
   width: 47%;
   flex-direction: row;
-  transition: transform .3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.05);
   }
 
+  @media screen and (max-width: $breakpointMobileMax) {
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
   p {
     width: 100%;
     margin-top: 2.5em;
     font-size: 1.8em;
+
+    @media screen and (max-width: $breakpointMobileMax) {
+      width: 100%;
+      font-size: 1em;
+    }
   }
 }
 
@@ -61,6 +76,11 @@ body {
   height: 200px;
   width: 200px;
   object-fit: cover;
+
+  @media screen and (max-width: $breakpointMobileMax) {
+    height: 100px;
+    width: 100px;
+  }
 }
 
 .main-header-container {
@@ -73,6 +93,18 @@ body {
   padding-bottom: 20px;
   background-color: $primary-bg-dark;
   margin-bottom: 5%;
+
+  @media screen and (max-width: $breakpointMobileMax) {
+    height: 75px;
+  }
+}
+
+.abakus-logo {
+  height: 50px;
+
+  @media screen and (max-width: $breakpointMobileMax) {
+    height: 0px;
+  }
 }
 
 .header-main-heading {
@@ -82,6 +114,13 @@ body {
   display: flex;
   margin-bottom: 0;
   width: 250px;
+
+  @media screen and (max-width: $breakpointMobileMax) {
+    width: 200px;
+    font-size: 1.4em;
+    text-align: left;
+    padding-left: 13%;
+  }
 }
 
 .main-heading {
@@ -97,4 +136,16 @@ body {
   width: 250px;
   display: flex;
   justify-content: right;
+  align-items: flex-end;
+
+  @media screen and (max-width: $breakpointMobileMax) {
+    width: 100px;
+    margin-right: 5%;
+  }
+}
+
+.logo-o {
+  @media screen and (max-width: $breakpointMobileMax) {
+    color: rgb(191, 48, 48);
+  }
 }
