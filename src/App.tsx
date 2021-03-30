@@ -29,11 +29,6 @@ const App: React.FC = () => {
             path="/:name/day/:day"
             render={(props) => <Nutpage />}
           ></Route>
-          <Route
-            exact
-            path="/markdown"
-            render={(props) => <MarkdownComponent />}
-          ></Route>
         </Layout>
       </Router>
     </div>

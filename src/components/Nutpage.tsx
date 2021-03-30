@@ -15,6 +15,7 @@ import { useRouteMatch } from "react-router-dom";
 import LeaderBoard from "./LeaderBoard";
 import _ from "lodash";
 import config from "../config";
+import MarkdownComponent from "./MarkdownComponent";
 
 interface MatchParams {
   name: string;
@@ -153,14 +154,10 @@ const Nutpage: React.FC = () => {
           />
         </div>
         <div className="task-description-container">
-          <p className="task-description nutpage-middle">{task.description}</p>
-          <div className="subtask-container nutpage-middle">
-            <ul>
-              {task.subtasks.map((subtask: string, i: number) => (
-                <li key={i}>{subtask}</li>
-              ))}
-            </ul>
-          </div>
+          <MarkdownComponent
+            classname="nutpage-middle"
+            markdown={task.description}
+          />
         </div>
       </div>
       <div className="codeMirror-editor">
