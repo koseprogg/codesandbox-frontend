@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  ImageCardProps,
-  TaskCardProps,
-  CompetitionCardProps,
-} from "../../shared/types";
+import { ImageCardProps } from "../../shared/types";
 import { useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
 
