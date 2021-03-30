@@ -16,6 +16,8 @@ const ImageCard = (props: ImageCardProps) => {
   return (
     <div
       className="competition-card"
+      tabIndex={0}
+      role="button"
       onClick={() => {
         props.isTask
           ? history.push({ pathname: `${match.url}/day/${props.day}` })
