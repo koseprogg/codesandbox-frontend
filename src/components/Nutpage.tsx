@@ -153,9 +153,7 @@ const Nutpage: React.FC = () => {
           />
         </div>
         <div className="task-description-container">
-          <span className="task-description nutpage-middle">
-            {task.description}
-          </span>
+          <p className="task-description nutpage-middle">{task.description}</p>
           <div className="subtask-container nutpage-middle">
             <ul>
               {task.subtasks.map((subtask: string, i: number) => (

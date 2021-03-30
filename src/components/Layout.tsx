@@ -5,6 +5,9 @@ import { useAuth } from "../hooks/useAuth";
 import config from "../config";
 import "./Mainpage.scss";
 
+const mobile: boolean = window.matchMedia("screen and (max-width: 768px)")
+  .matches;
+
 const abakusLogo = require("../../public/images/abakus_logo_white_improved.png")
   .default;
 
@@ -37,9 +40,11 @@ const Layout: React.FC = ({ children }) => {
     <div id="layout">
       <div className="main-header-container">
         <Link to="/" className="header-main-link">
-          <h1 className="header-main-heading">Kodenøtter</h1>
+          <h1 className="header-main-heading">{`K${
+            mobile ? "🔴" : "o"
+          }denøtter`}</h1>
         </Link>
-        <img height="50" src={abakusLogo} alt={"abakuslogo"} />
+        <img className="abakus-logo" src={abakusLogo} alt={"abakuslogo"} />
         <div className="profile-image">
           {user ? (
             <>
