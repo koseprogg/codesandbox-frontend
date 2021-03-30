@@ -10,12 +10,15 @@ type Props = {
   name: string;
   day?: string;
   task?: string;
+  isCompetitionLeaderboard: boolean;
 };
 
 type PlayerScore = {
   _id: string;
   score: number;
   users: User;
+  executionTime?: number;
+  characterCount?: number;
 };
 
 const LeaderBoard = (props: Props): JSX.Element => {
@@ -23,7 +26,7 @@ const LeaderBoard = (props: Props): JSX.Element => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { name, day, task } = props;
+  const { name, day, task, isCompetitionLeaderboard } = props;
 
   const url =
     day && name
@@ -41,7 +44,9 @@ const LeaderBoard = (props: Props): JSX.Element => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{`Dag ${day || ""}: ${task || ""}`}</Modal.Title>
+          <Modal.Title>
+            {day ? `Dag ${day}: ${task || ""}` : "Samlet ledertavle"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <CustomTable
@@ -51,9 +56,26 @@ const LeaderBoard = (props: Props): JSX.Element => {
                 <tr key={player._id}>
                   <td>{player.users.username}</td>
                   <td>{player.score}</td>
+                  {isCompetitionLeaderboard ? (
+                    <> </>
+                  ) : (
+                    <>
+                      <td>
+                        {player.executionTime
+                          ? `${player.executionTime} ms`
+                          : "-"}
+                      </td>
+                      <td>
+                        {player.characterCount
+                          ? `${player.characterCount} tegn`
+                          : "-"}
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))
             }
+            isCompetitionLeaderboard={isCompetitionLeaderboard}
             error={error?.toString()}
           />
         </Modal.Body>

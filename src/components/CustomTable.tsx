@@ -5,9 +5,14 @@ import { Table, Alert } from "react-bootstrap";
 type Props = {
   data?: React.ReactNode;
   error?: string;
+  isCompetitionLeaderboard: boolean;
 };
 
-const CustomTable: React.FC<Props> = ({ data, error }: Props) => {
+const CustomTable: React.FC<Props> = ({
+  data,
+  error,
+  isCompetitionLeaderboard,
+}: Props) => {
   return (
     <>
       {!error && data ? (
@@ -16,6 +21,14 @@ const CustomTable: React.FC<Props> = ({ data, error }: Props) => {
             <tr>
               <th>Name</th>
               <th>Score</th>
+              {isCompetitionLeaderboard ? (
+                <></>
+              ) : (
+                <>
+                  <th>Kjøretid</th>
+                  <th>Tegn brukt</th>
+                </>
+              )}
             </tr>
           </thead>
           <tbody>{data}</tbody>
