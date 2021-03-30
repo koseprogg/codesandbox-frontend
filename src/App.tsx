@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import CompetitionPage from "./components/CompetitionPage";
 import Mainpage from "./components/Mainpage";
 import Nutpage from "./components/Nutpage";
-import CustomTable from "./components/CustomTable";
 import Layout from "./components/Layout";
 
 const App: React.FC = () => {
@@ -13,11 +12,6 @@ const App: React.FC = () => {
       <Router>
         <Layout>
           <Route path="/" exact render={(props) => <Mainpage />}></Route>
-          <Route
-            exact
-            path="/table"
-            render={(props) => <CustomTable />}
-          ></Route>
           <Route
             exact
             path="/:name"

@@ -30,6 +30,8 @@ interface CodeRes {
     score: number;
     possibleScore: number;
     achievedScore: number;
+    characterCount: number;
+    elapsedTimeInMilis: number;
   };
 }
 
@@ -39,6 +41,8 @@ const Nutpage: React.FC = () => {
   const [score, setScore] = useState<number>();
   const [possibleScore, setPossibleScore] = useState<number>();
   const [achievedScore, setAchievedScore] = useState<number>();
+  const [characterCount, setCharacterCount] = useState<number>();
+  const [elapsedTimeInMilis, setElapsedTimeInMilis] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
@@ -115,6 +119,13 @@ const Nutpage: React.FC = () => {
             10
           )
         );
+        setCharacterCount(
+          Number.parseInt(
+            JSON.stringify(response.data.result.characterCount),
+            10
+          )
+        );
+        setElapsedTimeInMilis(response.data.result.elapsedTimeInMilis);
       }
     }
   }
@@ -136,6 +147,7 @@ const Nutpage: React.FC = () => {
         day={match.params.day}
         name={match.params.name}
         task={task.name}
+        isCompetitionLeaderboard={false}
       />
       <div className="task-container">
         <div className="nutpage-middle">
@@ -175,12 +187,22 @@ const Nutpage: React.FC = () => {
             "Venter på svar ... "
           ) : score != undefined &&
             possibleScore != undefined &&
-            achievedScore != undefined ? (
-            <Alert variant={score === 100 ? "success" : "primary"}>
-              {score === 100
-                ? `Full pott! Svaret ditt ga ${achievedScore} av ${possibleScore} poeng!! 🎉`
-                : `Svaret ditt ga ${achievedScore} av ${possibleScore} poeng.`}
-            </Alert>
+            achievedScore != undefined &&
+            characterCount != undefined &&
+            elapsedTimeInMilis != undefined ? (
+            <>
+              <Alert variant={score === 100 ? "success" : "primary"}>
+                {score === 100
+                  ? `Full pott! Svaret ditt ga ${achievedScore} av ${possibleScore} poeng!! 🎉`
+                  : `Svaret ditt ga ${achievedScore} av ${possibleScore} poeng.`}
+              </Alert>
+              <Alert variant={"primary"}>
+                {`Kjøretid: ${elapsedTimeInMilis} ms.`}
+              </Alert>
+              <Alert variant={"primary"}>
+                {`Antall tegn: ${characterCount}.`}
+              </Alert>
+            </>
           ) : errorMsg ? (
             ""
           ) : (
