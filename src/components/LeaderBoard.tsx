@@ -41,7 +41,9 @@ const LeaderBoard = (props: Props): JSX.Element => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{`Dag ${day || ""}: ${task || ""}`}</Modal.Title>
+          <Modal.Title>
+            {day ? `Dag ${day}: ${task || ""}` : "Samlet ledertavle"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <CustomTable
