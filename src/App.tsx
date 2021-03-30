@@ -6,6 +6,7 @@ import Mainpage from "./components/Mainpage";
 import Nutpage from "./components/Nutpage";
 import CustomTable from "./components/CustomTable";
 import Layout from "./components/Layout";
+import MarkdownComponent from "./components/MarkdownComponent"
 
 const App: React.FC = () => {
   return (
