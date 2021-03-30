@@ -6,6 +6,7 @@ import Mainpage from "./components/Mainpage";
 import Nutpage from "./components/Nutpage";
 import CustomTable from "./components/CustomTable";
 import Layout from "./components/Layout";
+import MarkdownComponent from "./components/MarkdownComponent"
 
 const App: React.FC = () => {
   return (
@@ -27,6 +28,11 @@ const App: React.FC = () => {
             exact
             path="/:name/day/:day"
             render={(props) => <Nutpage />}
+          ></Route>
+          <Route
+            exact
+            path="/markdown"
+            render={(props) => <MarkdownComponent />}
           ></Route>
         </Layout>
       </Router>
