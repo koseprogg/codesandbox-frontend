@@ -10,7 +10,7 @@ import "codemirror/mode/javascript/javascript.js";
 import { Task } from "../shared/types";
 import { useFetch } from "../hooks/useFetch";
 import { useAuth } from "../hooks/useAuth";
-import { Alert, Button } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
 import LeaderBoard from "./LeaderBoard";
 import _ from "lodash";
@@ -49,6 +49,12 @@ const Nutpage: React.FC = () => {
 
   const { user } = useAuth();
 
+  const [sendSubmission, setSendSubmission] = useState(!!user);
+
+  React.useEffect(() => {
+    setSendSubmission(!!user);
+  }, [user]);
+
   const match = useRouteMatch<MatchParams>("/:name/day/:day");
 
   const { response, error } = match
@@ -73,11 +79,11 @@ const Nutpage: React.FC = () => {
     }
   }, [response]);
 
-  const saveCodeLocal = _.debounce(() => {
+  const saveCodeLocal = _.debounce((value) => {
     if (match?.params == null) return;
     const { day, name } = match.params;
     const store = `code-${name}-${day}`;
-    localStorage.setItem(store, code);
+    localStorage.setItem(store, value);
   }, 500);
 
   async function sendCode() {
@@ -94,7 +100,8 @@ const Nutpage: React.FC = () => {
     const response = await axios.post<CodeRes>(
       url,
       {
-        code: code,
+        code,
+        sendSubmission,
       },
       axconfig
     );
@@ -161,7 +168,7 @@ const Nutpage: React.FC = () => {
             }}
             onBeforeChange={(editor, data, value) => {
               setCode(value);
-              saveCodeLocal();
+              saveCodeLocal(value);
             }}
           />
         </div>
@@ -173,9 +180,25 @@ const Nutpage: React.FC = () => {
         </div>
       </div>
       <div className="codeMirror-editor">
-        <Button className="nutpage-middle" onClick={sendCode} variant="primary">
-          Send kode
-        </Button>
+        <div className="nutpage-middle">
+          <Button onClick={sendCode} variant="primary">
+            Send kode
+          </Button>
+          <Form.Check
+            type="checkbox"
+            id="sendSubmission-check"
+            checked={sendSubmission}
+            onChange={() => setSendSubmission(!sendSubmission)}
+            label="Lagre besvarelse"
+            aria-describedby="sendSubmissionHelp"
+            disabled={!user}
+          />
+          <Form.Text id="sendSubmissionHelp">
+            {!user
+              ? "Logg inn for å lagre besvarelsen"
+              : "Lagre besvarelsen. Du vil da havne på resultatlisten og andre brukere vil kunne se din score. Dersom skrudd av, vil du fortsatt få poeng for besvarelsen din, men den vil ikke lagres eller bidra til ditt resultat på ledertavlen."}
+          </Form.Text>
+        </div>
       </div>
       <div className="nutpage-middle">
         <h3>Din tilbakemelding</h3>
