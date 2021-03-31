@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useState } from "react";
 import "./Nutpage.css";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
@@ -97,49 +97,56 @@ const Nutpage: React.FC = () => {
     const axconfig = user
       ? { headers: { Authorization: `JWT ${user?.accessToken}` } }
       : undefined;
-    const response = await axios.post<CodeRes>(
-      url,
-      {
-        code,
-        sendSubmission,
-      },
-      axconfig
-    );
-    setIsFetching(false);
-    console.log(response.data);
-    if (response.status === 200 && response.data) {
-      if (response.data.msg) {
-        setErrorMsg(JSON.stringify(response.data.msg));
-      }
-      if (response.data.result) {
-        setScore(
-          Number.parseInt(JSON.stringify(response.data.result.score), 10)
-        );
-        setPossibleScore(
-          Number.parseInt(
-            JSON.stringify(response.data.result.possibleScore),
-            10
-          )
-        );
-        setAchievedScore(
-          Number.parseInt(
-            JSON.stringify(response.data.result.achievedScore),
-            10
-          )
-        );
-        setCharacterCount(
-          Number.parseInt(
-            JSON.stringify(response.data.result.characterCount),
-            10
-          )
-        );
-        setElapsedTimeInMilis(response.data.result.elapsedTimeInMilis);
-      }
-    } else if (response.status === 400 && response.data) {
-      if (response.data.msg) {
-        setErrorMsg(JSON.stringify(response.data.msg));
-      }
-    }
+    const response = await axios
+      .post<CodeRes>(
+        url,
+        {
+          code,
+          sendSubmission,
+        },
+        axconfig
+      )
+      .then((response) => {
+        setIsFetching(false);
+        if (response.status === 200 && response.data) {
+          if (response.data.msg) {
+            setErrorMsg(JSON.stringify(response.data.msg));
+          }
+          if (response.data.result) {
+            setScore(
+              Number.parseInt(JSON.stringify(response.data.result.score), 10)
+            );
+            setPossibleScore(
+              Number.parseInt(
+                JSON.stringify(response.data.result.possibleScore),
+                10
+              )
+            );
+            setAchievedScore(
+              Number.parseInt(
+                JSON.stringify(response.data.result.achievedScore),
+                10
+              )
+            );
+            setCharacterCount(
+              Number.parseInt(
+                JSON.stringify(response.data.result.characterCount),
+                10
+              )
+            );
+            setElapsedTimeInMilis(response.data.result.elapsedTimeInMilis);
+          }
+        }
+      })
+      .catch((err: AxiosError) => {
+        setIsFetching(false);
+        if (err.response) {
+          const { data, status } = err.response;
+          if (status === 400 && data.msg) {
+            setErrorMsg(JSON.stringify(data.msg));
+          }
+        }
+      });
   }
 
   const displayErrorMessage = () => {
