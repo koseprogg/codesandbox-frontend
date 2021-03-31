@@ -135,6 +135,10 @@ const Nutpage: React.FC = () => {
         );
         setElapsedTimeInMilis(response.data.result.elapsedTimeInMilis);
       }
+    } else if (response.status === 400 && response.data) {
+      if (response.data.msg) {
+        setErrorMsg(JSON.stringify(response.data.msg));
+      }
     }
   }
 
