@@ -183,6 +183,7 @@ const Nutpage: React.FC = () => {
             }}
           />
         </div>
+        <p className="nutpage-middle">(Oppgaven må løses i Javascript)</p>
         <div className="task-description-container">
           <MarkdownComponent
             classname="nutpage-middle"
