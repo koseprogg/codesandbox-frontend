@@ -7,10 +7,11 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/theme/neat.css";
 import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/clike/clike.js";
 import { Task } from "../shared/types";
 import { useFetch } from "../hooks/useFetch";
 import { useAuth } from "../hooks/useAuth";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Alert, Button, Form, Row, Col, Badge } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
 import LeaderBoard from "./LeaderBoard";
 import _ from "lodash";
@@ -36,6 +37,10 @@ interface CodeRes {
   };
 }
 
+const codeMirrorModes: Record<string, string> = {
+  java: "text/x-java",
+};
+
 const Nutpage: React.FC = () => {
   const [task, setTask] = useState<Task>();
   const [code, setCode] = useState("");
@@ -46,6 +51,8 @@ const Nutpage: React.FC = () => {
   const [elapsedTimeInMilis, setElapsedTimeInMilis] = useState<number>();
   const [errorMsg, setErrorMsg] = useState("");
   const [isFetching, setIsFetching] = useState(false);
+  const [languages, setLanguages] = useState<string[]>(["javascript"]);
+  const [submissionLang, setSubmissionLang] = useState<string>("javascript");
 
   const { user } = useAuth();
 
@@ -67,6 +74,12 @@ const Nutpage: React.FC = () => {
     if (response != null && !error) {
       const task = response.tasks[0];
       setTask(task);
+      if (task.languages && task.languages.length > 0) {
+        console.log(task.languages);
+        setLanguages(task.languages);
+        !task.languages.includes(submissionLang) &&
+          setSubmissionLang(task.languages[0]);
+      }
     }
 
     if (match?.params.day != null) {
@@ -74,7 +87,14 @@ const Nutpage: React.FC = () => {
       const store = `code-${name}-${day}`;
       const localCode = localStorage.getItem(store);
       if (!code && localCode != null) {
-        setCode(localCode);
+        try {
+          const {
+            code,
+            submissionLang,
+          }: { code: string; submissionLang: string } = JSON.parse(localCode);
+          setCode(code);
+          submissionLang && setSubmissionLang(submissionLang);
+        } catch (e) {}
       }
     }
   }, [response]);
@@ -83,7 +103,11 @@ const Nutpage: React.FC = () => {
     if (match?.params == null) return;
     const { day, name } = match.params;
     const store = `code-${name}-${day}`;
-    localStorage.setItem(store, value);
+    const storeVal = {
+      code: value,
+      submissionLang,
+    };
+    localStorage.setItem(store, JSON.stringify(storeVal));
   }, 500);
 
   async function sendCode() {
@@ -103,6 +127,7 @@ const Nutpage: React.FC = () => {
         {
           code,
           sendSubmission,
+          language: submissionLang,
         },
         axconfig
       )
@@ -170,12 +195,27 @@ const Nutpage: React.FC = () => {
       />
       <div className="task-container">
         <div className="nutpage-middle">
+          <Form.Group as={Row}>
+            <Col sm="3">
+              <Form.Control
+                as="select"
+                value={submissionLang}
+                onChange={(e) => setSubmissionLang(e.target.value)}
+              >
+                {languages.map((lang) => (
+                  <option key={lang}>{lang}</option>
+                ))}
+              </Form.Control>
+            </Col>
+          </Form.Group>
           <CodeMirror
             value={code}
             options={{
-              mode: "javascript",
+              mode: codeMirrorModes[submissionLang] || submissionLang,
               theme: "material",
               lineNumbers: true,
+              smartIndent: true,
+              cursorHeight: 0.8,
             }}
             onBeforeChange={(editor, data, value) => {
               setCode(value);
@@ -183,7 +223,16 @@ const Nutpage: React.FC = () => {
             }}
           />
         </div>
-        <p className="nutpage-middle">(Oppgaven må løses i Javascript)</p>
+        <p className="nutpage-middle">
+          Oppaven kan løses i følgende språk:{" "}
+          {languages.map((lang) => (
+            <>
+              <Badge key={lang} variant="primary">
+                {lang}
+              </Badge>{" "}
+            </>
+          ))}
+        </p>
         <div className="task-description-container">
           <MarkdownComponent
             classname="nutpage-middle"
