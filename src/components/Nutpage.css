@@ -24,7 +24,7 @@ body,
 #opp.header {
   margin-left: 30px;
 }
- 
+
 .nutpage-middle {
   margin-top: 2%;
   margin-left: 15%;
@@ -34,4 +34,15 @@ body,
 .react-codemirror2,
 .cm-s-material {
   height: 100%;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.monospace {
+  font-family: Consolas, Monaco, Lucida Console, Liberation Mono,
+    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 }

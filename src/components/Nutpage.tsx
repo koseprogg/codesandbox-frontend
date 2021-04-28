@@ -37,7 +37,7 @@ interface CodeRes {
   };
 }
 
-const codeMirrorModes: Record<string, string> = {
+export const codeMirrorModes: Record<string, string> = {
   java: "text/x-java",
 };
 
@@ -135,30 +135,13 @@ const Nutpage: React.FC = () => {
         setIsFetching(false);
         if (response.status === 200 && response.data) {
           if (response.data.msg) {
-            setErrorMsg(JSON.stringify(response.data.msg));
+            setErrorMsg(response.data.msg);
           }
           if (response.data.result) {
-            setScore(
-              Number.parseInt(JSON.stringify(response.data.result.score), 10)
-            );
-            setPossibleScore(
-              Number.parseInt(
-                JSON.stringify(response.data.result.possibleScore),
-                10
-              )
-            );
-            setAchievedScore(
-              Number.parseInt(
-                JSON.stringify(response.data.result.achievedScore),
-                10
-              )
-            );
-            setCharacterCount(
-              Number.parseInt(
-                JSON.stringify(response.data.result.characterCount),
-                10
-              )
-            );
+            setScore(response.data.result.score);
+            setPossibleScore(response.data.result.possibleScore);
+            setAchievedScore(response.data.result.achievedScore);
+            setCharacterCount(response.data.result.characterCount);
             setElapsedTimeInMilis(response.data.result.elapsedTimeInMilis);
           }
         }
@@ -168,7 +151,7 @@ const Nutpage: React.FC = () => {
         if (err.response) {
           const { data, status } = err.response;
           if (status === 400 && data.msg) {
-            setErrorMsg(JSON.stringify(data.msg));
+            setErrorMsg(data.msg);
           }
         }
       });
@@ -177,7 +160,8 @@ const Nutpage: React.FC = () => {
   const displayErrorMessage = () => {
     return errorMsg !== "" ? (
       <Alert variant="danger">
-        Koden din krasjet med denne feilen: {errorMsg}
+        Koden din krasjet med denne feilen:
+        <pre>{errorMsg}</pre>
       </Alert>
     ) : (
       <React.Fragment />
