@@ -1,4 +1,4 @@
-FROM node as builder
+FROM node:14 as builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY . ./
 # Create production build (lands in /dist)
 RUN yarn build
 
-FROM node:alpine
+FROM node:14-alpine
 
 WORKDIR /app
 
