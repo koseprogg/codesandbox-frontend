@@ -8,7 +8,7 @@ import config from "../config";
 
 type Props = {
   name: string;
-  day?: string;
+  day?: string | number;
   task?: string;
   isCompetitionLeaderboard: boolean;
 };
@@ -29,8 +29,8 @@ const LeaderBoard = (props: Props): JSX.Element => {
   const { name, day, task, isCompetitionLeaderboard } = props;
 
   const url =
-    day && name
-      ? `${config.BACKEND_URL}/competitions/${name}/day/${day}/leaderboard`
+    task && name
+      ? `${config.BACKEND_URL}/competitions/${name}/${task}/leaderboard`
       : `${config.BACKEND_URL}/competitions/${name}/leaderboard`;
   const { response, error } = useFetch<PlayerScore[]>(url);
 

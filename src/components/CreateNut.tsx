@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useRouteMatch } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import "./Nutpage.css";
 import axios, { AxiosError } from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
@@ -9,8 +9,10 @@ import "codemirror/theme/neat.css";
 import "codemirror/mode/javascript/javascript.js";
 import "codemirror/mode/clike/clike.js";
 import { useAuth } from "../hooks/useAuth";
+import { useFetch } from "../hooks/useFetch";
 import { Alert, Button, Form, Row, Col, Modal } from "react-bootstrap";
 import config from "../config";
+import { Task } from "../shared/types";
 import MarkdownComponent from "./MarkdownComponent";
 
 import { codeMirrorModes } from "./Nutpage";
@@ -19,7 +21,7 @@ const fixtureTip = `
 Her skriver du testene som skal kjøres. For java må su late en public klasse som bruker junit.
 Du kan ha så mange testmetoder du vil.
 
-Hver test kan gi en viss menge _poeng_.
+Hver test kan gi en viss mengde _poeng_.
 i java kan man sette antall poeng med \`@Points()\` annotasjonen.
 Et eksempel på en test er:
 ~~~java
@@ -32,15 +34,15 @@ public class PersonTest {
   @Test
   @Points(25)
   public void testGreet() {
-    Person shoki = new Person("Jent");
+    Person jens = new Person("Jens");
     assertEquals("Hello! My name is Jens. It is nice to meet you, Ola!",
-                 shoki.greet("Ola"));
+                 jens.greet("Ola"));
 
   }
 }
 ~~~
 
-**OBS**: Du må manuelt sette total antall poeng det er mulig å oppnå.
+**OBS**: Du må manuelt sette total antall poeng det er mulig å oppnå i feltet under.
 `;
 
 const LANGS = [
@@ -48,46 +50,87 @@ const LANGS = [
   "java",
 ];
 
-type PostRes = { msg?: string };
+type AdminTask = Task & {
+  fixture: string;
+  totalScore: number;
+};
 
-const NutEditor = (): JSX.Element => {
+type PostRes = { msg?: string };
+type Props = {
+  edit?: boolean;
+};
+
+const NutEditor = ({ edit }: Props): JSX.Element => {
   const { user } = useAuth();
+  const history = useHistory();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
   const [fixture, setFixture] = useState("");
-  const [possibleScore, setPossibleScore] = useState<number>();
-  const [languages, setLanguages] = useState<string[]>(["javascript"]);
+  const [possibleScore, setPossibleScore] = useState<number>(0);
+  const [languages, setLanguages] = useState<string[]>([LANGS[0]]);
 
   const [showPreview, setShowPreview] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState("");
 
   const match = useRouteMatch<{ name: string }>("/:name/new");
+  const editMatch = useRouteMatch<{ name: string; taskname: string }>(
+    "/:name/:taskname/edit"
+  );
+
+  const { response, error } =
+    edit && editMatch
+      ? useFetch<AdminTask>(
+          `${config.BACKEND_URL}/admin/competitions/${editMatch.params.name}/${editMatch.params.taskname}`
+        )
+      : { response: null, error: null };
+
+  useEffect(() => {
+    if (response != null && !error) {
+      const task = response;
+      setName(task.name);
+      setDescription(task.description);
+      setImage(task.image);
+      setFixture(task.fixture);
+      setPossibleScore(task.totalScore);
+      setLanguages(task.languages);
+    }
+  }, [response]);
 
   const submit = async () => {
-    const url = `${config.BACKEND_URL}/admin/competitions/${match?.params.name}/`;
+    const compName = match?.params.name || editMatch?.params.name;
+    const url =
+      edit && editMatch
+        ? `${config.BACKEND_URL}/admin/competitions/${compName}/${editMatch.params.taskname}`
+        : `${config.BACKEND_URL}/admin/competitions/${compName}/`;
     const axconfig = user
       ? { headers: { Authorization: `JWT ${user?.accessToken}` } }
       : undefined;
-    const response = await axios
-      .post<PostRes>(
-        url,
-        {
-          name,
-          description,
-          languages,
-          totalScore: possibleScore,
-          fixture,
-          day: 1,
-        },
-        axconfig
-      )
+    const response = await axios({
+      method: edit ? "PUT" : "POST",
+      url,
+      data: {
+        name,
+        image,
+        description,
+        languages,
+        totalScore: possibleScore,
+        fixture,
+        day: 1,
+      },
+      ...axconfig,
+    })
       .then((response) => {
-        if (response.status === 201 && response.data) {
+        if (
+          response.status === 201 ||
+          (response.status === 200 && response.data)
+        ) {
           if (response.data.msg) {
             setErrorMsg(response.data.msg);
           }
+          compName && history.push({ pathname: `/${compName}/${name}` });
         }
       })
       .catch((err: AxiosError) => {
@@ -102,7 +145,9 @@ const NutEditor = (): JSX.Element => {
 
   return (
     <div>
-      <h1 className="main-heading">Lag ny kodenøtt</h1>
+      <h1 className="main-heading">
+        {edit ? "Endre kodenøtt" : "Lag ny kodenøtt"}
+      </h1>
       <div className="task-container">
         <div className="nutpage-middle">
           <Form.Group>
@@ -113,6 +158,15 @@ const NutEditor = (): JSX.Element => {
               onChange={(e) => setName(e.target.value)}
             />
           </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Bilde</Form.Label>
+            <Form.Control
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+            />
+          </Form.Group>
+
           <Form.Group>
             <Form.Label>Beskrivelse (støtter markdown)</Form.Label>
             <Form.Control

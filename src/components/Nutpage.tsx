@@ -13,6 +13,7 @@ import { useFetch } from "../hooks/useFetch";
 import { useAuth } from "../hooks/useAuth";
 import { Alert, Button, Form, Row, Col, Badge } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import LeaderBoard from "./LeaderBoard";
 import _ from "lodash";
 import config from "../config";
@@ -20,7 +21,7 @@ import MarkdownComponent from "./MarkdownComponent";
 
 interface MatchParams {
   name: string;
-  day: string;
+  taskname: string;
 }
 
 interface Day {
@@ -42,6 +43,8 @@ export const codeMirrorModes: Record<string, string> = {
 };
 
 const Nutpage: React.FC = () => {
+  const history = useHistory();
+
   const [task, setTask] = useState<Task>();
   const [code, setCode] = useState("");
   const [score, setScore] = useState<number>();
@@ -62,11 +65,11 @@ const Nutpage: React.FC = () => {
     setSendSubmission(!!user);
   }, [user]);
 
-  const match = useRouteMatch<MatchParams>("/:name/day/:day");
+  const match = useRouteMatch<MatchParams>("/:name/:taskname");
 
   const { response, error } = match
     ? useFetch<Day>(
-        `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`
+        `${config.BACKEND_URL}/competitions/${match.params.name}/${match.params.taskname}`
       )
     : { response: null, error: null };
 
@@ -82,9 +85,9 @@ const Nutpage: React.FC = () => {
       }
     }
 
-    if (match?.params.day != null) {
-      const { day, name } = match.params;
-      const store = `code-${name}-${day}`;
+    if (match?.params.taskname != null) {
+      const { taskname, name } = match.params;
+      const store = `code-${name}-${taskname}`;
       const localCode = localStorage.getItem(store);
       if (!code && localCode != null) {
         try {
@@ -101,8 +104,8 @@ const Nutpage: React.FC = () => {
 
   const saveCodeLocal = _.debounce((value) => {
     if (match?.params == null) return;
-    const { day, name } = match.params;
-    const store = `code-${name}-${day}`;
+    const { taskname, name } = match.params;
+    const store = `code-${name}-${taskname}`;
     const storeVal = {
       code: value,
       submissionLang,
@@ -110,17 +113,18 @@ const Nutpage: React.FC = () => {
     localStorage.setItem(store, JSON.stringify(storeVal));
   }, 500);
 
+  const axconfig = user
+    ? { headers: { Authorization: `JWT ${user?.accessToken}` } }
+    : undefined;
+
   async function sendCode() {
     setIsFetching(true);
-    if (!match?.params.name || !match.params.day) {
+    if (!match?.params.name || !match.params.taskname) {
       setErrorMsg("Could not parse competition name and/or day");
       return;
     }
     setErrorMsg("");
-    const url = `${config.BACKEND_URL}/competitions/${match.params.name}/day/${match.params.day}`;
-    const axconfig = user
-      ? { headers: { Authorization: `JWT ${user?.accessToken}` } }
-      : undefined;
+    const url = `${config.BACKEND_URL}/competitions/${match.params.name}/${match.params.taskname}`;
     const response = await axios
       .post<CodeRes>(
         url,
@@ -157,6 +161,26 @@ const Nutpage: React.FC = () => {
       });
   }
 
+  const deleteNut = async () => {
+    match?.params &&
+      (await axios
+        .delete(
+          `${config.BACKEND_URL}/admin/competitions/${match.params.name}/${match.params.taskname}`,
+          axconfig
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            history.push("/");
+          }
+        })
+        .catch((err: AxiosError) => {
+          if (err.response) {
+            const { data } = err.response;
+            setErrorMsg(data.msg);
+          }
+        }));
+  };
+
   const displayErrorMessage = () => {
     return errorMsg !== "" ? (
       <Alert variant="danger">
@@ -170,9 +194,28 @@ const Nutpage: React.FC = () => {
 
   return task && match ? (
     <div>
-      <h1 className="main-heading">{`Dag ${match.params.day}: ${task.name}`}</h1>
+      <h1 className="main-heading">{`Dag ${task.day}: ${task.name}`}</h1>
+
+      {task.canEdit && (
+        <div className="center">
+          <Link to={(l) => `${l.pathname}/edit`} className="header-main-link">
+            <Button variant="secondary">Endre</Button>
+          </Link>
+
+          <Button
+            variant="danger"
+            onClick={() =>
+              confirm("Er du sikker på at du vil slette kodenøtten?") &&
+              deleteNut()
+            }
+          >
+            Slett
+          </Button>
+        </div>
+      )}
+
       <LeaderBoard
-        day={match.params.day}
+        day={task.day}
         name={match.params.name}
         task={task.name}
         isCompetitionLeaderboard={false}
