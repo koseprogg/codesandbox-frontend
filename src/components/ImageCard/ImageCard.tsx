@@ -16,7 +16,7 @@ const ImageCard = (props: ImageCardProps) => {
       role="button"
       onClick={() => {
         props.isTask
-          ? history.push({ pathname: `${match.url}/day/${props.day}` })
+          ? history.push({ pathname: `${match.url}/${props.name}` })
           : history.push({
               pathname: props.name,
             });

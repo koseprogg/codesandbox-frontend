@@ -2,6 +2,7 @@ export type Competition = {
   name: string;
   image: string;
   isActive: boolean;
+  canEdit?: boolean;
 };
 
 export interface ImageCardProps {
@@ -19,6 +20,7 @@ export type Task = {
   image: string;
   subtasks: string[];
   languages: string[];
+  canEdit?: boolean;
 };
 
 export interface CompetitionCardProps extends ImageCardProps {
