@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import "./Nutpage.css";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
@@ -18,12 +18,12 @@ import MarkdownComponent from "./MarkdownComponent";
 import { codeMirrorModes } from "./Nutpage";
 
 const fixtureTip = `
-Her skriver du testene som skal kjøres. For java må su late en public klasse som bruker junit.
+Her skriver du testene som skal kjøres. For java må du lage en public klasse som bruker junit.
 Du kan ha så mange testmetoder du vil.
 
 Hver test kan gi en viss mengde _poeng_.
-i java kan man sette antall poeng med \`@Points()\` annotasjonen.
-Et eksempel på en test er:
+For java kan man sette antall poeng med \`@Points()\` annotasjonen.
+Et eksempel på en testklasse er:
 ~~~java
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -100,7 +100,7 @@ const NutEditor = ({ edit }: Props): JSX.Element => {
   }, [response]);
 
   const submit = async () => {
-    const compName = match?.params.name || editMatch?.params.name;
+    const compName = match?.params.name || editMatch?.params.name || "";
     const url =
       edit && editMatch
         ? `${config.BACKEND_URL}/admin/competitions/${compName}/${editMatch.params.taskname}`
@@ -108,7 +108,7 @@ const NutEditor = ({ edit }: Props): JSX.Element => {
     const axconfig = user
       ? { headers: { Authorization: `JWT ${user?.accessToken}` } }
       : undefined;
-    const response = await axios({
+    await axios({
       method: edit ? "PUT" : "POST",
       url,
       data: {
@@ -122,7 +122,7 @@ const NutEditor = ({ edit }: Props): JSX.Element => {
       },
       ...axconfig,
     })
-      .then((response) => {
+      .then((response: AxiosResponse<PostRes>) => {
         if (
           response.status === 201 ||
           (response.status === 200 && response.data)
@@ -133,7 +133,7 @@ const NutEditor = ({ edit }: Props): JSX.Element => {
           compName && history.push({ pathname: `/${compName}/${name}` });
         }
       })
-      .catch((err: AxiosError) => {
+      .catch((err: AxiosError<PostRes>) => {
         if (err.response) {
           const { data, status } = err.response;
           if (status != 201 && data.msg) {
